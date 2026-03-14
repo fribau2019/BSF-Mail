@@ -1,0 +1,257 @@
+UNIT MGRCFG;
+
+{$I E:\SOURCE~1\PASCAL\NETMAIL\LANGAGE.DIR}
+
+Interface
+
+ Procedure DoorConfig;
+
+Implementation
+
+Uses Dos,
+     Crt,
+     BSFUtils,
+     MGRMenu,
+     MGRVaria,
+     MGRCFG1;
+
+
+TYPE TT = Record
+           X, Y : Byte;
+          End;
+
+VAR MENU : ARRAY [1..24] Of String;
+    DirInfo: SearchRec;
+    Posis : Byte;
+    Max : Shortint;
+    X   : Integer;
+    Y 	: Integer;
+    C       : Char;
+    Reponse : String[40];
+    I       : Longint;
+    Code    : Integer;
+    Cfg     : Text;
+    Fin     : Boolean;
+    Modif   : Boolean;
+
+{-------------------------------------------------------------------------}
+Procedure Cadre(Max : Byte);
+Begin;
+ GotoXY(1,Hi(WindMax)-3);
+ Writeln('  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿  ÚÄÄÄÄÄÄ¿');
+{$IFDEF ENGLISH}
+ Writeln('  ³ Edit Config File ³  ³ Create New Config ³  ³ Delete Config ³  ³ Quit ³');
+{$ELSE}
+ Writeln('  ³   Editer un CFG  ³  ³ Cr‚er Nouveau CFG ³  ³  Effacer CFG  ³  ³ Quit ³');
+{$ENDIF}
+ Writeln('  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ  ÀÄÄÄÄÄÄÙ');
+End;
+
+{-------------------------------------------------------------------------}
+Procedure Pop(MAX : Byte);
+
+Var
+    C 	: Char;
+    Fin : Boolean;
+    Chaine : String;
+
+Begin;
+ Y := 6;
+ X := 4;
+ Fin := False;
+ Repeat
+  TextBackGround(3);
+  TextColor(11);
+
+  WriteCenter(OrdonneCenter(Menu[Y-05], 17), Y);
+  GotoXY(X, Hi(WindMax)-2);
+
+ {$IFDEF ENGLISH}
+  If X = 04 Then Writeln(' Edit Config File ');
+  If X = 26 Then Writeln(' Create New Config ');
+  If X = 49 Then Writeln(' Delete Config ');
+  If X = 68 Then Writeln(' Quit ');
+ {$ELSE}
+  If X = 04 Then Writeln('   Editer un CFG  ');
+  If X = 26 Then Writeln(' Cr‚er Nouveau CFG ');
+  If X = 49 Then Writeln('  Effacer CFG  ');
+  If X = 68 Then Writeln(' Quit ');
+ {$ENDIF}
+
+   C := Upcase(Readkey);
+
+   If C = #77 Then Begin;
+			  TextBackGround(0);
+			  TextColor(11);
+                          GotoXY(X, Hi(WindMax)-2);
+                         {$IFDEF ENGLISH}
+                          If X = 04 Then Writeln(' Edit Config File ');
+                          If X = 26 Then Writeln(' Create New Config ');
+                          If X = 49 Then Writeln(' Delete Config ');
+                          If X = 68 Then Writeln(' Quit ');
+                         {$ELSE}
+                          If X = 04 Then Writeln('   Editer un CFG  ');
+                          If X = 26 Then Writeln(' Cr‚er Nouveau CFG ');
+                          If X = 49 Then Writeln('  Effacer CFG  ');
+                          If X = 68 Then Writeln(' Quit ');
+                         {$ENDIF}
+                          Inc(X);
+                   End;
+
+   If C = #75 Then Begin;
+			  TextBackGround(0);
+			  TextColor(11);
+                          GotoXY(X, Hi(WindMax)-2);
+                         {$IFDEF ENGLISH}
+                          If X = 04 Then Writeln(' Edit Config File ');
+                          If X = 26 Then Writeln(' Create New Config ');
+                          If X = 49 Then Writeln(' Delete Config ');
+                          If X = 68 Then Writeln(' Quit ');
+                         {$ELSE}
+                          If X = 04 Then Writeln('   Editer un CFG  ');
+                          If X = 26 Then Writeln(' Cr‚er Nouveau CFG ');
+                          If X = 49 Then Writeln('  Effacer CFG  ');
+                          If X = 68 Then Writeln(' Quit ');
+                         {$ENDIF}
+                          Dec(X);
+                   End;
+
+
+   If C = #80 Then Begin;
+  		    TextBackGround(0);
+		    TextColor(11);
+                    WriteCenter(OrdonneCenter(Menu[Y-05],17), Y);
+                    Inc(Y);
+		   End;
+   If C = #72 Then Begin;
+                    TextBackGround(0);
+		    TextColor(11);
+                    WriteCenter(OrdonneCenter(Menu[Y-05],17), Y);
+		    Dec(Y);
+		   End;
+   If C = #13 Then Begin;
+   	            TextBackGround(0);
+		    TextColor(11);
+                    WriteCenter(OrdonneCenter(Menu[Y-05],17), Y);
+                    Fin := True;
+                   End;
+
+   If C = #27 Then Begin;
+                    Y := 05+Max;
+                    X := 0;
+                    Fin := True;
+                   End;
+
+ If Y = 05 Then Y := 05+MAX;
+ If Y = 06+MAX Then Y := 06;
+
+ If X = 05 Then X := 26; If X = 27 Then X := 49;
+ If X = 50 Then X := 68; If X = 69 Then X := 04;
+ If X = 03 Then X := 68; If X = 25 Then X := 04;
+ If X = 48 Then X := 26; If X = 67 Then X := 49;
+
+ Until Fin = True;
+ TextColor(15);
+ TextBackGround(0);
+ Y := Y - 5;
+ If X = 04 Then X := 1;
+ If X = 26 Then X := 2;
+ If X = 49 Then X := 3;
+ If X = 68 Then X := 0;
+
+End;
+{-------------------------------------------------------------------------}
+Procedure DoorConfig;
+Begin;
+
+ CursorOff;
+ TextBackGround(0); TextColor(14); ClrScr;
+{$IFDEF ENGLISH}
+ WriteCenter('þþþ CONFIGURATION EDITOR þþþ',1);
+{$ELSE}
+ WriteCenter('þþþ EDITEUR DE CONFIGURATION þþþ',1);
+{$ENDIF}
+ TextColor(11);
+
+{Recherche Les CFG De BSFMAIL}
+ Repeat
+  FindFirst('*.CFG', Archive, DirInfo);
+  Max := 1;
+  While ( (DosError = 0) Or (Max >=24) ) do
+  begin
+    Menu[Max] := DirInfo.Name;
+    FindNext(DirInfo);
+    Inc(Max);
+  End;
+
+{Affiche Les CFG dans un Cadre}
+ WriteCenter('ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿',5);
+ For I := 1 To Max Do
+  Begin;
+   WriteCenter('³                 ³', 5+I);
+   TextColor(11);
+   WriteCenter(Menu[Posis], 5+I);
+   TextColor(15);
+  End;
+ WriteCenter('ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ',5+I);
+
+{Affiche Le Menu}
+ TextColor(11);
+ GotoXY(1,Hi(WindMax)-3);
+ Writeln('  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿  ÚÄÄÄÄÄÄ¿');
+{$IFDEF ENGLISH}
+ Writeln('  ³ Edit Config File ³  ³ Create New Config ³  ³ Delete Config ³  ³ Quit ³');
+{$ELSE}
+ Writeln('  ³   Editer un CFG  ³  ³ Cr‚er Nouveau CFG ³  ³  Effacer CFG  ³  ³ Quit ³');
+{$ENDIF}
+ Writeln('  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ  ÀÄÄÄÄÄÄÙ');
+
+
+ If Max > 0 Then Pop(Max);
+
+  CursorOn;
+  If X = 1 Then DoorConfigue(Menu[Y]);
+
+  If ( (X = 2) Or (Max = 0)) Then
+   Begin;
+    GotoXY(10, Hi(WindMax)-10);
+    Menu[Max+1] := '';
+   {$IFDEF ENGLISH}
+    Write('Please Enter Config Name (.CFG) : ');
+   {$ELSE}
+    Write('Veuillez Entrer Un Nom De Config (.CFG) : ');
+   {$ENDIF}
+    ReadLn(Menu[Max+1]);
+    If Pos('.CFG', MAJ(Menu[Max+1])) > 0 Then Menu[Max+1] := Copy(Menu[Max+1], 1, Pos('.', Menu[Max+1])-1);
+    If Length(Menu[Max+1]) > 8 Then Menu[Max+1] := Copy(Menu[Max+1], 1, 8);
+    If Menu[Max+1] <> '' Then Menu[Max+1] := MAJ(Menu[Max+1]) + '.CFG';
+    If Menu[Max+1] <> '' Then DoorConfigue(Menu[Max+1]);
+   End;
+
+  If X = 3 Then
+   Begin;
+    GotoXY(13,Hi(WindMax)-7);
+   {$IFDEF ENGLISH}
+    Write('Delete '+Menu[Y]+' (Y/N) ? ');
+   {$ELSE}
+    Write('Effacer '+Menu[Y]+' (O/N) ? ');
+   {$ENDIF}
+    Repeat
+     C := Upcase(ReadKey);
+    Until C in ['Y','N','O',#27];
+
+    Case C Of
+     'O',
+     'Y' : Begin;
+            Assign(CFG, Menu[Y]);
+            Erase(CFG);
+           End;
+     #27,
+     'N' :;
+    End;
+   End;
+
+ Until X = 0;
+End;
+{-------------------------------------------------------------------------}
+END.
