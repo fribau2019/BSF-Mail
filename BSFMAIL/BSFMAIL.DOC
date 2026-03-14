@@ -1,0 +1,1648 @@
+
+
+ÚÄÄÄÄÄÄÄÄÄ¿ ÚÄÄÄÄÄÄÄÄÄ¿ÚÄÄÄÄÄÄÄÄÄ¿ÚÄÄÄÄÄÄÄÄÄÄÄ¿  ÚÄÄÄÄÄÄÄÄ¿ ÚÄÄÄÄÄÄ¿ÚÄÄÄÄ¿
+À¿ÿÿÚÄÄÄ¿ÿÀ¿³ÿÿÚÄÄÄÄ¿ÿ³À¿ÿÿÚÄÄÄ¿ÿ³³ÿÿÚÄ¿ÿÚÄ¿ÿÿ³  ³ÿÿÚÄÄ¿ÿÿ³ ÀÄ¿ÿÿÚÄÙÀ¿ÿÿÚÙ
+ ³ÿÿ³   ³ÿÿ³³ÿÿ³    ÀÄÙ ³ÿÿ³   ÀÄÙ³ÿÿ³ ³ÿ³ ³ÿÿ³  ³ÿÿ³  ³ÿÿ³   ³ÿÿ³   ³ÿÿ³
+ ³ÿÿÀÄÄÄÙÿÿ³³ÿÿÀÄÄÄÄÄÄ¿ ³ÿÿÀÄÄ¿   ³ÿÿ³ ³ÿ³ ³ÿÿ³  ³ÿÿÀÄÄÙÿÿ³   ³ÿÿ³   ³ÿÿ³
+ ³ÿÿÚÄÄÄ¿ÿÿ³ÀÄÄÄÄÄÄ¿ÿÿ³ ³ÿÿÚÄÄÙ   ³ÿÿ³ ³ÿ³ ³ÿÿ³  ³ÿÿÚÄÄ¿ÿÿ³   ³ÿÿ³   ³ÿÿ³
+ ³ÿÿ³   ³ÿÿ³ÚÄ¿    ³ÿÿ³ ³ÿÿ³      ³ÿÿ³ ÀÄÙ ³ÿÿ³  ³ÿÿ³  ³ÿÿ³   ³ÿÿ³   ³ÿÿ³  ÚÄ¿
+ÚÙÿÿÀÄÄÄÙÿÚÙ³ÿÀÄÄÄÄÙÿÿ³ÚÙÿÿÀ¿    ÚÙÿÿÀ¿   ÚÙÿÿÀ¿ÚÙÿÿÀ¿ÚÙÿÿÀ¿ÚÄÙÿÿÀÄ¿ÚÙÿÿÀÄÄÙÿ³
+ÀÄÄÄÄÄÄÄÄÄÙ ÀÄÄÄÄÄÄÄÄÄÙÀÄÄÄÄÙ    ÀÄÄÄÄÙ   ÀÄÄÄÄÙÀÄÄÄÄÙÀÄÄÄÄÙÀÄÄÄÄÄÄÙÀÄÄÄÄÄÄÄÄÙ
+
+
+                  BSFMAIL DOOR COURRIER OFFLINE VERSION 1.00á06
+                          POUR SPITFIRE(C) VERSION 3.5
+                      BSFMAIL SYSTEM MANAGER VERSION 1.006
+                        POUR BSFMAIL(C) VERSION 1.00á06
+                      (C) Copyright 1995 - Fr‚d‚ric Ribau
+                            Touts Droits R‚serv‚s
+
+
+
+      1. Copyright & Droits........................................
+
+      2. Introduction..............................................
+
+      3. Comment marche BSFMAIL et le format QWK ?.................
+
+      4. Syntaxe...................................................
+
+      5. Installation..............................................
+
+      6. Les fichiers systŠmes de BSFMAIL..........................
+
+      7. Pr‚sentation de BSFMAIL SYSTEM MANAGER....................
+
+      8. Les diff‚rentes fonctions de BSFMGR.......................
+          a. Fichiers de configuration de BSFMAIL..................
+          b. Maintenance des utilisateurs..........................
+          c. Maintenance des conf‚rences...........................
+          d. Protocole de transfert................................
+          e. Mode de compression...................................
+          f. Taille des paquets/messages...........................
+          g. Maintenance des aides.................................
+          h. Statistiques..........................................
+
+      9. Utiliser BSFMAIL online...................................
+          a. Les commandes des conf‚rences.........................
+          b. Les attributs des conf‚rences.........................
+          c. Les options des utilisateurs..........................
+          d. L'option prescan......................................
+
+     10. BSFMAIL en mode local.....................................
+
+     11. BSFMAIL en mode automatique...............................
+
+     12. Configuration en HUB......................................
+
+     13. Utiliser BSFMAIL en multi nodes...........................
+
+     14. Notes de l'auteur et remerciements........................
+
+
+
+
+1. Copyright et droits
+----------------------
+
+  Fr‚d‚ric Ribau ne peut ˆtre responsable des dommages cr‚‚s lors de l'
+   utilisation de BSFMAIL par quiconque, y compris les pertes de donn‚es,
+   mauvaises sauvegardes, ou tous autres cons‚quences due … l'utilisation de
+   ce programme, ou d'une de ces parties. La totale responsabilit‚ est
+   attribu‚e … l'utilisateur.
+
+  Le software BSFMAIL est distribu‚ en tant que "shareware". Vous ˆtes libre
+   de le distribuer gratuitement, de le donner … d'autres SysOps, et vous
+   ˆtes mˆme encourag‚ … le faire. Vous ˆtes libre d'utiliser BSFMAIL pendant
+   une p‚riode d'essai de 30 (trente) jours. Si vous continuez … l'utiliser
+   aprŠs cette p‚riode d'essai, veuillez remplir et renvoyer le fichier
+   REGISTER.BSF … l'auteur de ce software. L'enregistrement de BSFMAIL
+   enlŠvera les quelques brides de ce programme.
+
+  BSFMAIL ne peut ˆtre distribuer autre que par le r‚seau des serveurs
+   informatiques. Toute distribution par des moyens physiques (disquettes,
+   CDROM, etc...) doit ˆtre demand‚ par ‚crit … l'auteur de ce programme.
+
+
+2. Introduction
+---------------
+
+  BSFMAIL est une Door (programme externe) con‡ut pour fonctionner avec le
+   programme de BBS SPITFIRE 3.5 (Copyright de Mike Woltz, Buffalo Creek
+   Software, USA). BSFMAIL est une door offline compatible pour les fichiers
+   au format QWK, qui permet de lire avec efficacit‚ les messages et de
+   r‚pondre … ces messages Offline. BSFMAIL utilise le format .QWK pour
+   le transfert de paquet. Le format QWK est un format utiliser par un grand
+   nombre de lecteur de courrier. En utilisant ce format, l'utilisateur peut
+   utiliser un lecteur de courrier 'offline' de son choix. Il y a beaucoup de
+   lecteur, certains contenant des fonctions plus appropri‚es … chacun.
+
+  Voici une liste de quelques lecteur de courrier 'Offline ' :
+      ş EZ-Reader
+      ş Session Manager
+      ş OLX
+      ş Speed Read
+      ş KingQWK
+      ş Power-QWK
+      ş RoseReader
+      ş WinQWK
+      ş WinRead
+      ş MegaMail Reader 2.10
+      ş ...
+
+  En utilisant une door de courrier offline, l'utilisateur participera d'
+   avantages aux conf‚rences de part sa simplicit‚, ce qui permettra une plus
+   grand nombre de connexion par jour sur le BBS (d– au fait qu'ils ne vont
+   pas lire les messages sur place), d'avoir plus de messages post‚s et
+   embellis (… cause des tag-lines), etc...
+
+
+
+
+3. Comment marche BSFMAIL et le format QWK ?
+--------------------------------------------
+
+  Je vais vous expliquer maintenant comment une lecteur de courrier offline
+   marche avec le format QWK cr‚e par BSFMAIL. Quand vous utilisez le setup
+   de BSFMAIL, on vous demande votre BBS comme un code d'identification (8
+   lettres maximum). On va utiliser SPITFIRE comme code d'ID. Un utilisateur
+   se connecte sur votre BBS et d‚sire lire les messages avec son lecteur de
+   courrier offline. Il trouve que vous avez BSFMAIL et il est exalt‚ ! Il
+   s‚lecte la door BSFMAIL depuis Spitfire, et une fois qu'il est dans
+   BSFMAIL, il utilise l'option configuration de BSFMAIL, l'option protocole
+   de transfert, l'option mode de compression en fonction des paramŠtres de
+   son lecteur de courrier. Ensuite, il utilise la commande 'S‚lection Des
+   Conf‚rences' de BSFMAIL et s‚lectionne les conf‚rences qu'il veut prendre.
+
+  Ensuite, il s‚lectionne la commande Download de BSFMAIL, qui va scanner les
+   nouveaux messages sur les conf‚rences s‚lectionn‚es. BSFMAIL va pr‚parer
+   un paquet de messages, nomm‚ SPITFIRE.QWK, et contenant tous les messages
+   qu'il n'a pas encore lu (Ce paquet contient les messages et des fichiers
+   pointeurs sp‚ciaux). Il se d‚connecte du BBS. D'autres utilsateurs peuvent
+   alors venir sur le BBS pendant qu'il lit les messages de votre BBS avec
+   son lecteur de courrier offline.
+
+  Il utilise donc son lecteur de courrier offline favori et lit tous les
+   nouveaux messages de votre BBS. Il r‚pond … certains d'entres eux, et cr‚e
+   automatiquement … la fin un fichier nomm‚ SPITFIRE.REP sur son ordinateur.
+   Il appelle votre BBS, va dans la door BSFMAIL, et s‚lectionne la commande
+   Upload. Il uploade son SPITFIRE.REP cr‚‚, BSFMAIL le re‡oit et redistribue
+   les messages auquel il a r‚pondu dans les conf‚rences correspondantes.
+
+  Ceci est une explication assez brŠve et simpliste. C'est plus amusant d'
+   utiliser BSFMAIL que de lire la documentation. L'amusement vient lorsque
+   vous utilisez BSFMAIL et votre lecteur de courrier offline favori. Essayez
+   BSFMAIL et farfouiller avec les commandes utilisables, et vous apprendrez
+   plus simplement comment tout marche.
+
+
+
+
+
+
+
+4. Syntaxe
+----------
+
+  Syntaxe : BSFMAIL [Option]
+
+            Les options disponibles sont : ş DOWNLOAD
+                                           ş UPLOAD
+                                           ş LOCAL
+                                           ş PRESCAN
+                                           ş VERIFY
+                                           ş IMPORT
+                                           ş EXPORT
+
+  En sp‚cifiant une des commandes ci-dessus, cela vous permettra d'utiliser
+   BSFMAIL en mode automatique et/ou local, ce qui permettra … BSFMAIL de
+   marcher durant une event, par exemple, ou en mode local.
+
+
+  Exemples:
+
+   BSFMAIL
+        Ouvre la door BSFMAIL en utilisant le port COM sp‚cifi‚ dans le
+         fichier DOOR.SYS
+
+   BSFMAIL LOCAL
+         BSFMAIL marche maintenant en mode local, ce qui vous permet d'
+          utiliser BSFMAIL sans passer par le BBS.
+
+   BSFMAIL DOWNLOAD
+        Ouvre BSFMAIL en mode automatique. BSFMAIL va scanner les nouveaux
+         fichiers pour vous, en utilisant le DOOR.SYS pr‚sent dans le
+         r‚pertoire de BSFMAIL, et va placer le nouveau QWK dans le
+         r‚pertoire sp‚cifier dans le setup de BSFMAIL
+
+   BSFMAIL UPLOAD
+        Ouvre BSFMAIL en mode automatique. BSFMAIL va regarder si votre
+         r‚pertoire QWK contient un fichier REP. S'il le trouve, il va
+         int‚grer les messages pr‚sent dans ce fichier. En fin de session, le
+         fichier REP est effac‚.
+
+   BSFMAIL PRESCAN
+        Cette commande va permettre d'effectuer, lors d'une ‚vent, par
+         exemple, la pr‚paration des paquets de courrier pour les utilisateurs
+         poss‚dant l'option Prescan active. Le fichier va ˆtre stock‚ dans
+         un r‚pertoire temporaire, jusqu'… ce que l'utilisateur vienne le
+         chercher, d'o— un gain de temps assez consid‚rable.
+
+   BSFMAIL VERIFY
+        Cette commande va permettre effectuer les changements dans la base
+         utilisateurs de BSFMAIL lorsque vous aurez effectu‚ une purge des
+         utilisateurs de Spitfire.
+
+   BSFMAIL IMPORT (*** Commande non encore implant‚e ***)
+        Cette commande va permettre d'importer des fichiers QWK d'autres BBS
+         (Votre HUB, par exemple) dans votre propre base messagerie. Pour
+         cela, il faut que le paquet download‚ ait le statue Net mail pour
+         ˆtre incorpor‚.
+
+   BSFMAIL EXPORT (*** Commande non encore implant‚e ***)
+        Cette commande va permettre d'envoy‚ … votre HUB (ou tout autres BBS),
+         les messages que vous avez re‡u sur votre BBS pour les transmettre
+         sur d'autres BBS. Bien s–r, il faut que vous ayez le statue Net mail
+         pour effectuer cette op‚ration.
+
+
+
+
+5. Installation
+---------------
+
+  Configuration Requise : IBM Compatible, DOS 3.x ou sup‚rieur, logiciel de
+   BBS Spitfire version 3.5, 300 Ko de m‚moire libre, et quelques programmes
+   de protocoles de transfert et programmes de compression de fichiers.
+
+  Introduction : Spitfire v3.5 g‚nŠre un fichier DOOR.SYS lorsque l'
+   utilisateur se connecte. BSFMAIL utilise ce fichier pour acc‚der …
+   certaines fonctions du serveur, telles que les r‚pertoire de Spitfire, le
+   nom de l'utilisateur, etc... BSFMAIL est concu pour marcher au mieux avec
+   Spitfire, et donc ne pas modifier le setup de BSFMAIL lorsque vous changer
+   celui de BSFMAIL. La seule exception (il en faut bien une!) est lorsque
+   vous changer le noms des conf‚rences de Spitfire, vous devez changer la
+   liste des conf‚rences dans le fichier BSFCONF.DAT
+
+  Placez tous les fichiers de BSFMAIL dans un sous-r‚pertoire diff‚rent
+   (C:\BSFMAIL, par exemple). Les fichiers suivant doivent ˆtre pr‚sents dans
+   ce r‚pertoire.
+
+       ş BSFMAIL.EXE   (*)
+       ş BSFMAIL.HLP   (*)                 (*) : NE PAS MODIFIER.
+       ş BSFMAIL.CFG                       (#) : Cr‚‚ avec BSFMGR.EXE
+       ş BSFMGR.EXE    (*)                 (~) : Cr‚‚ automatiquement.
+       ş BSFCOMP.DAT   (#)
+       ş BSFCONF.DAT   (#)
+       ş BSFCONF.DEF   (#)
+       ş BSFPROTO.DAT  (#)
+       ş BSFERROR.LOG  (ø)
+
+  Utilisez ensuite BSFMGR.EXE pour configurer BSFMAIL avec votre BBS. Pour
+   plus de d‚tails, veuillez lire le chapitre 'Utiliser BSFMGR La PremiŠre
+   Fois', consacr‚ … l'installation de BSFMAIL par BSFMGR.
+
+  Avant de lancer BSFMAIL, vous devez d‚clarer une variable d'environnement
+   BSFMAIL dans votre AUTOEXEC.BAT contenant le chemin, ainsi que le nom du
+   fichier de configuration de BSFMAIL.
+    Ex : SET BSFMAIL=C:\BSFMAIL\BSFMAIL.CFG
+
+  DŠs lors, BSFMAIL est prˆt … fonctionner. Il vous reste maintenant … savoir
+   comment vous voulez l'installer dans Spitfire. Il y a eux possibilit‚s :
+
+    a. En tant que Door dans le menu Doors.
+    b. Comme une commande externe dans la section messagerie.
+
+       Quelle est la diff‚rence, me diriez-vous ? L'option B va permettre …
+        l'utilisateur de rentrer dans BSFMAIL plus simplement en n'utilisant
+        qu'une seule commande depuis la session messagerie. Or, si vous avez
+        d‚j… un programme externe sur cette commande, vous ne pourrez
+        rajouter BSFMAIL, ce qui est navrant!
+
+       L'option A permet justement de contourner ce problŠme, ce qui
+        permettra d'utiliser BSFMAIL et d'autres programmes.
+
+       Si vous ne pouvez d‚cider quelle option utiliser, la meilleure
+        recommandation … mon avis est de placer BSFMAIL dans la session
+        messagerie. Toutefois, vous pouvez aussi l'installer dans les deux
+        sections, ce qui peut ˆtre un plus tant pour vous que pour vos
+        utilisateurs.
+
+       Pour acc‚der … partir de la session messagerie de Spitfire … BSFMAIL,
+        ‚ditez le fichier texte SFMESS.BAT, et ‚crivez :
+
+                     CD C:\BSFMAIL
+                     BSFMAIL.EXE
+                     CD C:\SF
+
+        Il faut faudra aussi modifier le fichier SFMSG.MNU, en mettant la
+         ligne suivante :
+
+                     K,<K>................... BSFMail,,5,@
+
+
+       De mˆme pour acc‚der … partir de la session doors de Spitfire, ‚ditez
+        le fichier texte SF.BAT, et mettez :
+
+                      :DOOR_A
+                       REM Door Courrier OffLine BSFMAIL
+                         CD C:\BSFMAIL
+                         BSFMAIL.EXE
+                         CD C:\SF
+                       GOTO Loop
+
+        Et modifier le fichier SFDOOR.MNU, en mettant la ligne suivante :
+
+                      BSFMail         ,SEC>=5
+
+
+       L'installation principale de BSFMAIl est finie. Il ne vous reste plus
+        qu'… lancer BSFMAIL … partir de Spitfire pour voir si tout va bien !
+
+
+
+
+
+
+6. Les fichiers systŠmes de BSFMAIL
+-----------------------------------
+
+
+  BSFMAIL ne requiŠre que peu de fichiers systŠmes pour fonctionner.
+   Lorsque BSFMAIL est configurer, les fichiers systŠmes de BSFMAIL qui
+   doivent se trouver IMPERATIVEMENT dans le r‚pertoire choisi pour
+   BSFMAIL, sont :
+
+       ş BSFMAIL.HLP
+       ş BSFMAIL.CFG
+       ş BSFCOMP.DAT
+       ş BSFCONF.DAT
+       ş BSFCONF.DEF
+       ş BSFPROTO.DAT
+       ş BSFUSERS.DAT
+       ş BSFMAIL.CLR/BBS  (*)
+       ş BSFNUSER.CLR/BBS (*)               (*) Facultatif
+       ş BSFERROR.LOG     (ø)               (ø) Al‚atoire
+       ş *.LOG
+
+
+    * BSFMAIL.HLP : Contient la liste des aides disponibles sous BSFMAIL pour
+                     chaque commande. Ce n'est pas un fichier texte. Vous
+                     pouvez le modifier avec l'option 'Changer Aide' de
+                     BSFMGR. {Version Enregistr‚e Seulement}
+
+
+    * BSFMAIL.CFG : Fichier texte de configuration de BSFMAIL. Vous pouvez le
+                     modifier en utilisant BSFMGR, ou si vous avez un editeur
+                     texte, la forme de ce fichier est la suivante :
+
+                     #01 : R‚pertoire de BSFMAIL
+                     #02 : Nom du BBS.
+                     #03 : Code d'identification du BBS.
+                     #04 : Ville Du BBS.
+                     #05 : T‚l‚phone.
+                     #06 : R‚pertoire QWK par d‚faut.
+                     #07 : R‚pertoire et nom de la page de pr‚sentation.
+                     #08 : R‚pertoire et nom de la page des nouvelles.
+                     #09 : R‚pertoire et nom de la page de fin.
+                     #10 : Toujours ajouter les nouveaux fichiers ? [Y/N].
+                     #11 : Autorise la d‚connection … partir de BSFMAIL [Y/N]
+                     #12 : R‚pertoire et nom du fichier log.
+                     #13 : R‚pertoire de Spitfire O— se trouve le DOOR.SYS.
+                     #14 : R‚pertoire o— sera stock‚ les fichiers pr‚scan‚s.
+
+
+                   Ex : Fichier BSFMAIL.CFG
+
+                        C:\BSFMAIL\
+                        Joshua BBS
+                        JOSHUA
+                        Versailles, France
+                        33.1.3953.4797
+                        C:\QWK\
+                        C:\SF\DISPLAY\WELCOME1.CLR
+                        C:\SF\DISPLAY\SFNWSLTR.CLR
+                        C:\SF\DISPLAY\GOODBYE.CLR
+                        N
+                        N
+                        C:\SF\CALLERS.TMP
+                        C:\SF\
+                        C:\BSFMAIL\PRESCAN\
+
+    * BSFCOMP.DAT : Contient la liste des commandes des modes de compression
+                     que vous pouvez modifier avec BSFMGR.
+
+    * BSFCONF.DAT : Ce fichier contient la liste des conf‚rences disponibles
+                     sur votre BBS. C'est un fichier texte, vous pouvez le
+                     modifier manuellement ou avec BSFMGR. Chaque ligne ne
+                     doit pas d‚passer 13 caractŠres (norme QWK).
+
+    * BSFCONF.DEF : Ce fichier contient la liste des conf‚rences par d‚faut
+                     que vous proposez aux utilisateurs, ainsi que les
+                     conf‚rences que vous les obligez … prendre. Ce n'est pas
+                     un fichier texte mais il est modifiable avec BSFMGR.
+
+    * BSFPROTO.DAT: Contient la liste des commandes des protocoles de
+                     transfert externes que vous pouvez modifier avec BSFMGR.
+                     Ce n'est pas un fichier texte.
+
+    * BSFUSERS.DAT: Ce fichier contient la liste de tous les utilisateurs
+                     ayant utiliser BSFMAIL. Il possŠde toutes les informations
+                     sur chaque utilisateur (nombre de download/upload,
+                     conf‚rences choisies, dernier envoie, etc...). Il est
+                     modifiable avec BSFMGR.
+
+    * BSFERROR.LOG: Lorsque BSFMAIL ne connaŒt pas une commande que vous lui
+                     avez sp‚cifiez, il sort en cr‚ant un fichier
+                     BSFERROR.LOG contenant la commande inconnue.
+
+    *        *.LOG: Ce fichier log garde la trace au format texte de toutes
+                     les op‚rations effectu‚es par l'utilisateur. Il est au
+                     format du CALLERS.LOG  de Spitfire, vous pouvez donc l'
+                     inclure sans problŠme dans le CALLERS.TMP de Spitfire.
+
+    * BSFMAIL.CLR/BBS : Ce fichier sera envoy‚ … l'utilisateur pour remplacer
+                         l'‚cran principal de BSFMAIL. Le choix du fichier
+                         (BBS ou CLR) est d‚termin‚ automatiquement en
+                         fonction du mode graphique de l'utilisateur.
+
+    * BSFNUSER.CLR/BBS : Lors de la premiŠre connexion d'un utilisateur dans
+                          BSFMAIL, cet ‚cran lui sera envoy‚ pour l'informer
+                          sur les diff‚rentes fonctions de BSFMAIL, ce qu'il
+                          doit faire, et/ou lui faire connaŒtre directement
+                          la liste des r‚seaux re‡ut sur le BBS.
+
+
+
+
+7. Pr‚sentation de BSFMAIL SYSTEM MANAGER
+-----------------------------------------
+
+  BSFMGR.EXE est un systŠme ‚diteur qui a ‚t‚ cr‚‚ pour simplifier les
+   configuration de BSFMAIL.
+
+  Pour l'instant, BSFMAIL est en version bˆta... Beaucoup de choses peuvent
+   changer d'ici … la version non bˆta. Faites donc attention … la version
+   de BSFMGR, qui peut ˆtre sp‚cifique … une seule version de BSFMAIL.
+   Pour v‚rifier que votre version de BSFMGR marche correctement avec les
+   fichiers de BSFMAIL, regardez la version de BSFMGR, le 3Šme chiffre
+   d‚cimal indique la version bˆta.
+
+      Ex : BSFMGR Version 1.002  --> BSFMAIL Version 1.00á02
+
+   En cas de doute sur la version, regardez l'entˆte de cette documentation,
+    la version de BSFMAIL, ainsi que celle de BSFMGR est indiqu‚e clairement.
+
+
+
+
+
+8. Les diff‚rentes fonctions de BSFMGR
+--------------------------------------
+
+  BSFMAIL SYSTEM MANAGER se compose de six fonctions principales, accessible
+   depuis le menu, comme suit :
+
+                    ş Configuration de BSFMAIL.
+                    ş Maintenance des utilisateurs.
+                    ş Maintenance des confs
+                    ş Protocole de transfert.
+                    ş Mode de compression.
+                    ş Maintenance Des aides.
+                    ş Statistiques
+
+  Lorsque vous lancez BSFMGR, le menu principal se pr‚sente comme ci-dessous.
+
+                  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+                  ³       Configuration De BSFMAIL        ³
+                  ³     Maintenance Des Utilisateurs      ³
+                  ³      Maintenance Des Conf‚rences      ³
+                  ³         Protocole De Transfert        ³
+                  ³          Mode De Compression          ³
+                  ³      Taille Des Paquets/Messages      ³
+                  ³         Maintenance Des Aides         ³
+                  ³        Statistiques G‚n‚rales         ³
+                  ³                 Fin                   ³
+                  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+  Vous vous d‚placer en utilisant les flŠches de contr“le de votre clavier.
+  Pour s‚lectionnez une fonction, appuyez sur <ENTER>.
+  A tout moment, vous pouvez sortir du (sous)-menu en appuyant sur ESC.
+
+
+
+
+8a. Fichiers De Configuration De BSFMAIL
+----------------------------------------
+
+  L'‚diteur de configuration va ‚diter les fichiers .CFG dans le r‚pertoire
+   courant. Cela va vous permettre ‚diter les fichiers de configuration .CFG
+   de BSFMAIL dans un environnement plus compr‚hensible pour vous !
+
+  Lorsque vous s‚lectionnez donc cette fonction, vous voyez que BSFMGR vous
+   donne la liste des fichiers CFG pr‚sents dans ce r‚pertoire. Vous pouvez
+   donc, soit les modifier, soit les effacer ou bien encore en cr‚er d'autres.
+   Choisissez votre option en jouant sur les flŠches de contr“le.
+   L'‚cran est le suivant :
+
+    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+    ³                şşş EDITEUR DE CONFIGURATION şşş                  ³
+    ³                                                                  ³
+    ³                     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿                          ³
+    ³                     ³   LOCAL1.CFG    ³                          ³
+    ³                     ³   BSFMAIL2.CFG  ³                          ³
+    ³                     ³   BSFMAIL1.CFG  ³                          ³
+    ³                     ³   BSFMAIL.CFG   ³                          ³
+    ³                     ³   LOCAL.CFG     ³                          ³
+    ³                     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ                          ³
+    ³                                                                  ³
+    ³ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿ÚÄÄÄÄÄÄ¿³
+    ³³ Edit Configuratø ³³ Cr‚er Nouveau CFG ³³  Effacer CFG  ³³ Quit ³³
+    ³ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙÀÄÄÄÄÄÄÙ³
+    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+  Si c'est votre premiŠre configuration de BSFMAIL, aucun fichier CFG n'est
+   pr‚sent dans le r‚pertoire, vous devez donc en cr‚er un. Le programme
+   vous demande alors quel nom de fichier vous voulez lui attribuer. Rentrez
+   par exemple : BSFMAIL (sans extension), et vous acc‚dez donc au menu de
+   configuration du fichier BSFMAIL.CFG
+
+  Si vous voulez cr‚er un nouveau fichier de configuration, BSFMGR va vous
+   demander un nom de fichier (sans l'extension .CFG).
+
+  Si vous voulez effacer un fichier, BSFMGR va vous demander confirmation,
+   si telle est le cas, le fichier sera effac‚.
+
+  Si vous voulez ‚diter un fichier de configuration ou que vous cr‚ez un
+   nouveau fichier, cet ‚cran s'efface et vous avez alors l'‚cran de
+   configuration du fichier voulu :
+
+    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+    ³               EDITEUR DE CONFIGURATION : LOCAL1.CFG              ³
+    ³                                                                  ³
+    ³A..Nom du BBS : Joshua BBS              B..Nom Du BBS ID : JOSHUA ³
+    ³                                                                  ³
+    ³C..Ville Du BBS  : Versailles, France                             ³
+    ³D..T‚l‚phone BBS : 33.1.3953.4797                                 ³
+    ³                                                                  ³
+    ³E..R‚pertoire Spitfire  : C:\SF\                                  ³
+    ³F..R‚pertoire BSFMAIL   : C:\BSFMAIL\                             ³
+    ³G..R‚pertoire Local QWK : C:\QWK\                                 ³
+    ³H..R‚pertoire Prescan   : C:\BSFMAIL\PRESCAN\                     ³
+    ³                                                                  ³
+    ³I..Nom De La Page De Pr‚sentation : C:\SF\DISPLAY\WELCOME1.CLR    ³
+    ³J..Nom De La Page Des Nouvelles   : C:\SF\DISPLAY\SFNWSLTR.BBS    ³
+    ³K..Nom De La Page De Fin          : C:\SF\DISPLAY\GOODBYE.CLR     ³
+    ³L..Nom Du Fichier LOG             : C:\BSFMAIL\LOCAL.LOG          ³
+    ³                                                                  ³
+    ³M..Toujours Ajouter Les Nouveaux Fichiers : NON                   ³
+    ³N..Autoriser La D‚connection Dans BSFMAIL : OUI                   ³
+    ³                                                                  ³
+    ³Votre Choix [A-N], Q: Quitter:                                    ³
+    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+  Vous voyez en haut de l'‚cran l'intitul‚ de la fonction, suivit du nom du
+   fichier que vous ˆtre entrain de traiter.
+    Ex :  EDITEUR DE CONFIGURATION : BSFMAIL.CFG
+
+  Ensuite, il va falloir remplir la configuration de votre fichier CFG :
+
+    A] Nom du BBS     : Le nom g‚n‚ral de votre BBS.
+                          Ex : Joshua BBS
+
+    B] Code ID Du BBS : Le nom d'identification de votre BBS. Il ne doit pas
+                         exc‚der 8 lettres... Il servira … nommer les fichiers
+                         QWK et REP de votre BBS.
+                          Ex : JOSHUA
+
+    C] Ville Du BBS   : Ville o— est implanter votre BBS.
+                         Ex : Versailles, France
+
+    D] T‚l‚phone      : Num‚ro d'appel de votre BBS.
+                         Ex : 33.1.3953.4797
+
+    E] R‚pertoire SF  : Lecteur & chemin o— se situe le r‚pertoire principal
+                         de Spitfire.
+                          Ex : C:\SF\
+
+    F] R‚pertoire BSFMAIL : Lecteur & chemin o— sont implant‚s les fichiers
+                             de BSFMAIL.
+                              Ex : C:\BSFMAIL\
+
+    G] R‚pertoire QWK     : Lecteur & chemin o— seront stock‚s vos fichiers QWK
+                             et REP.
+                              Ex : C:\QWK\
+
+    H] R‚pertoire Prescan : Lecteur & chemin o— seront stock‚s les fichiers
+                             prescann‚s pour les utilisateurs.
+                              Ex : C:\BSFMAIL\PRESCAN\
+
+    I] Nom de la page de pr‚sentation : Lecteur, chemin et nom du fichier qui
+                                         servira de page de pr‚sentation.
+                                          Ex : C:\SF\DISPLAY\WELCOME1.CLR
+
+    J] Nom de la page des nouvelles   : Lecteur, chemin et nom du fichier qui
+                                         servira de page des nouvelles. Il
+                                         est plutot recommand‚ de prendre la
+                                         page ASCII.
+                                          Ex : C:\SF\DISPLAY\SFNWSLTR.BBS
+
+    K] Nom de la page de fin          : Lecteur, chemin et nom du fichier qui
+                                         servira de page de fin.
+                                          Ex : C:\SF\DISPLAY\GOODBYE.CLR
+
+    L] Nom Du Fichier LOG             : Lecteur, chemin et nom du fichier qui
+                                         servira de trace pour BSFMAIL.
+                                         [Fichier ASCII]
+                                          Ex : C:\SF\CALLERS.TMP
+
+    M] Toujours Ajouter les nouveaux fichiers :
+            Si vous r‚pondez (O)ui, BSFMAIL va inclure la liste des nouveaux
+             fichiers dans chaque paquet download‚.
+
+    N] Autorisez la d‚connexion :
+            Si vous r‚pondez (O)ui, BSFMAIL va autoriser l'utilisateur … ce
+             d‚connecter du BBS … partir de la door BSFMAIL (grƒce …
+             l'option <G>oodbye).
+
+
+
+
+  Lorsque vous aurez fini, il vous suffira de sortir et d'indiquer que vous
+   sauvegardez votre fichier.
+
+
+
+
+8b. Maintenance Des Utilisateurs
+--------------------------------
+
+
+  Cette fonction permet de contr“ler et de modifier les sp‚cifications des
+   utilisateurs de BSFMAIL, tant au niveau des options que sur les
+   conf‚rences s‚lectionn‚es.
+
+  L'‚cran apparaŒt comme ci-dessous :
+
+    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+    ³    [ #1 Sur 78 ]      MAINTENANCE UTILISATEURS       SF User #1       ³
+    ³úDernier QWK : 07-31-94 … 14:58                                        ³
+    ³úNom : Albert Dupont                               NETMAIL STATUS      ³
+    ³                                                                       ³
+    ³úProtocole        : 0   úCompression      : 0                          ³
+    ³                                                                       ³
+    ³úEcran Pr‚sentatø : OUI úPetit CONTROL.DAT: NON úUpload Fichiers  : NON³
+    ³úBulletins        : NON úEnvoie .NDX      : OUI úDownload Fichiers: NON³
+    ³úEcran Nouvelles  : NON úEnvoie Infos     : NON úAutorise Fich Ul : NON³
+    ³úScan Nv Fichiers : NON úDate Courante    : NON úAutorise Fich Dl : NON³
+    ³úEcran De Fin     : NON úPrescan          : NON                        ³
+    ³úExpert Mode      : NON úRepeat Prescan   : NON                        ³
+    ³úMsgs Par Conf    : ì   úMsgs Par Pacquet : ì                          ³
+    ³                                                                       ³
+    ³  úConf‚rence Active   : 24                                            ³
+    ³[---------------------------------------------------------------------]³
+    ³ <N>..Nom       <P>..Protocole   <C>..Compression   <F>..Conferences   ³
+    ³ <A>..Ajouter   <D>..Efface      <+>..Suivant       <->..Pr‚c‚dent     ³
+    ³ <X>..Extra     <O>..Options     <S>..Recherche     <Q>..Quitter       ³
+    ³[---------------------------------------------------------------------]³
+    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+  Note : Lorsque cette option est s‚lectionner, BSFMGR montre en premier le
+   1er utilisateur. BSFMGR montre le nombre d'utilisateur, ainsi que la
+   position de cet utilisateur dans la base, et la position de celui dans la
+   base de Spitfire.
+
+  Les options sont les suivantes :
+
+     - N]om      : Cette option vous permet d'‚diter le nom de l'utilisateur.
+                    La taille maximum de l'utilisateur est de 40 caractŠres.
+
+     - P]rotocole : Cette option vous permet de changer le protocole de
+                     transfert. C'est un num‚ro compris entre 0 et 9.
+                     R‚f‚rez-vous … la liste des protocoles pour s‚lectionner
+                     le bon num‚ro.
+
+     - C]ompression : Cette option vous permet de changer le mode de
+                       compression. C'est un num‚ro compris entre 0 et 9.
+                       R‚f‚rez-vous … la liste des modes de compression pour
+                       s‚lectionner le bon num‚ro.
+
+     - [F] Conf‚rences : Cette option vous permet de changer les conf‚rences
+                          attribu‚es par l'utilisateur. Lorsque vous
+                          s‚lectionnez cette option, BSFMGR vous affiche
+                          la liste des conf‚rences, ainsi que les attributs
+                          de cette utilisateur. Pour pouvoir changer/modifier
+                          ces attributs, et les diff‚rents pointeurs.
+                          R‚f‚rez-vous au chapitre : "Commandes Conf‚rences".
+                         Note : BSFMGR cherche si l'utilisateur existe dans
+                          la base utilisateurs de Spitfire. S'il ne le trouve pas,
+                          vous ne pouvez changer les attributs de cet
+                          utilisateur (ce qui est normal), et le programme
+                          vous demande si vous voulez l'effacer.
+
+      - A]jouter       : Cette option vous permet de rajouter un utilisateur
+                          dans la base utilisateur de BSFMAIL. Entrez le nom
+                          et le pr‚nom et la fiche est cr‚‚e. BSFMGR ne
+                          cherche pas … savoir si l'utilisateur existe dans
+                          la base de Spitfire. Au cas o— il n'existe pas,
+                          vous ne pourrez modifier les attributs des
+                          conf‚rences.
+
+      - D] Efface     : Cette option vous permet d'effacer un utilisateur
+                         de la base de BSFMAIL. AprŠs confirmation de votre
+                         part, BSFMGR va effacer l'utilisateur et
+                         reconstruire la base utilisateur.
+                        ATTENTION : Cette option est irr‚versible : Vous ne
+                         pourrez pas annuler l'effacement par la suite.
+
+           
+      - [+] Suivant   : Cette option passe … la fiche suivante.
+
+      - [-] Pr‚c‚dent : Cette option passe … la fiche pr‚c‚dente.
+
+      - O]ptions : Cette option vous permet de modifier les options de cette
+                    utilisateur. Lorsque vous s‚lectionnez cette fonction,
+                    la menu des options change et vous avez alors les
+                    options suivantes :
+
+    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+    ³[---------------------------------------------------------------------]³
+    ³ A..Ecran Pr‚sentation  F..Petit CONTROL.DAT      K..Upload Fichiers   ³
+    ³ B..Bulletins           G..Envoyer Fichiers NDX   L..Download Fichiers ³
+    ³ C..Ecran Nouvelle      H..Envoyer Infos          M..Autorise Fichier U³
+    ³ D..Scan Nv Fichiers    I..Utiliser Date Courante N..Autorise Fichier D³
+    ³ E..Ecran De Fin        J..Prescan                O..Expert Mode       ³
+    ³ P..Netmail Status      Q..Repeat Prescan                              ³
+    ³[---------------------------------------------------------------------]³
+    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+  Ces options vous permettent de mettre ON/OFF celles-ci.
+
+  Si NETMAIL STATUS est sur ON, BSFMGR affiche en inverser en haut
+   de l'‚cran, … droite, 'NETMAIL STATUS', et vous donnera le nombre de
+   conf‚rences NETMAIL s‚lectionn‚es.
+
+  Toutes ces options sont d‚crites dans le chapitre : "Les options Des
+   utilisateur".
+
+  Les options K, L, M, N ne sont pas encore implant‚es.
+
+  Pour revenir au menu pr‚c‚dent, appuyez sur <Q>uitter ou sur ESC.
+
+
+
+
+      - X] Extra : Cette option vous permet de voir les statistiques sur cet
+                    utilisateur. En s‚lectionnant cette option, BSFMGR vous
+                    affiche l'‚cran suivant :
+
+   ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+   ³ ş Total De Connection : 5           ş Nombre De Paquets Downloaded : 0 ³
+   ³ ş Total D'Appel SysOp : 0           ş Nombre De Paquets Uploaded   : 0 ³
+   ³ ş Nombre De Messages Downloaded : 31                                   ³
+   ³ ş Nombre De Messages Uploaded   : 0                                    ³
+   ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+                   Vous ne pouvez pas changer ces donn‚es.
+
+      - S]Recherche  : Cette option vous permet de chercher un utilisateur
+                        dans la base utilisateur de BSFMAIL. La recherche
+                        peut se faire soit partiellement, soit sur le nom en
+                        entier.
+                       Lorsqu'un utilisateur correspond au nom que vous avez
+                        entr‚, il vous sera demand‚ si c'est bien lui ou non.
+                        Si c'est lui, BSFMGR stoppe et vous montre sa fiche,
+                        sinon, il continue la recherche. S'il ne trouve pas
+                        l'utilisateur, le programme vous l'indique.
+
+      - Q]uitter : S‚lectionnez cette option pour quitter le maintenance des
+                    des utilisateurs et pour revenir au menu principal. Vous
+                    pouvez aussi appuyer sur ESC, ce qui aura le mˆme effet.
+
+
+
+
+8c. Maintenance Des Conf‚rences
+-------------------------------
+
+  En utilisant cette fonction, vous allez rentrer dans un menu qui va vous
+   permettre de nommer les conf‚rences au format QWK, c'est … dire que la
+   taille des conf‚rences ne devra pas exc‚der 13 caractŠres.
+
+  BSFMGR vous affiche l'‚cran suivant :
+
+                 ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+                 ³          MAINTENANCE DES CONFERENCES            ³
+                 ³                                                 ³
+                 ³  Conf‚rence #1 Sur 116                          ³
+                 ³                                                 ³
+                 ³  Conf‚rence Spitfire : Main Board               ³
+                 ³                                                 ³
+                 ³  S‚curit‚ Spitfire : 1                          ³
+                 ³                                                 ³
+                 ³  <A> .. Conf‚rence BSFMAIL : Main Board         ³
+                 ³                                                 ³
+                 ³  <B> .. D‚faut : OUI                            ³
+                 ³  <C> .. Forc‚  : OUI                            ³
+                 ³                                                 ³
+                 ³ Votre Choix [A..C,V,#,+,-], Q Pour Quitter :    ³
+                 ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+  BSFMGR vous affiche les caract‚ristiques des conf‚rences au niveau de
+   Spitfire (nom et niveau de s‚curit‚), ainsi que les attributs de cette
+   conf‚rence au niveau de BSFMAIL.
+
+  Si c'est la premiŠre fois que vous utilisez cette option et que le fichier
+   BSFCONF.DAT n'existe pas, le programme va prendre les 13 premier
+   caractŠres du nom des conf‚rences de Spitfire (en enlevant les espaces),
+   pour le mettre au format de BSFMAIL.
+
+  Les commandes de cette fonction sont :
+
+
+      - [A] : Conf‚rence BSFMAIL : En s‚lectionnant cette option, vous
+                                    pourrez mettre le nom de la conf‚rence au
+                                    format QWK, pour ˆtre utiliser par les
+                                    lecteurs de courrier offline.
+
+      - [B] : D‚faut : En mettant cette option sur OUI, BSFMAIL va
+                        s‚lectionner cette conf‚rence par d‚faut pour les
+                        nouveaux utilisateurs. Elle pourra ˆtre changer par
+                        la suite par l'utilisateur en s‚lectionnant les
+                        conf‚rences.
+
+      - [C] : Forcer : En mettant cette option sur OUI, BSFMAIL va
+                        automatiquement attribuer cette conf‚rence … tous les
+                        utilisateurs, et elle ne pourra pas ˆtre changer. Les
+                        conf‚rences scann‚es pour le download de paquet
+                        inclura cette conf‚rence.
+
+      - [V] : Cette option permet de visualiser les conf‚rences par ligne, en
+               mode 25 ou 40/50 lignes. l'‚cran s'affiche comme suivant :
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³[Num][Sec] [Nom Des Conf‚rences Spitfire]   [NetID]       [TAG] ³
+          ³                                                                ³
+          ³ 100    5  BSF - Bulletin Board System      BSF-BBS         D   ³
+          ³ 101  100  BSF - Test                       BSF-Test        D   ³
+          ³ 102    5  BSF - Electronique               BSF-Electric    D   ³
+          ³ 103    5  BSF - HP 48 S/SX/GX              BSF-HP 48       D   ³
+          ³ 104  100  BSF - SysOps                     BSF-SysOps          ³
+          ³ 105    5  BSF - Raytracing                 BSF-Raytrace    D   ³
+          ³ 106    5  BSF - Delirium                   BSF-Delirium    D   ³
+          ³ 107    5  BSF - Satellites                 BSF-Satellite   D   ³
+          ³ 108    5  BSF - Loisirs                    BSF-Loisirs     D   ³
+          ³ 109    5  BSF - Rumeurs                    BSF-Rumeurs     D   ³
+          ³ 110    5  BSF - Emploie                    BSF-Emploies    D   ³
+          ³ 111    5  BSF - Sciences Fiction           BSF-S.Fiction   D   ³
+          ³ 112    5  BSF - Films                      BSF-Films       D   ³
+          ³ 113  200  BSF - A.B.S.F.                   BSF-ABSF            ³
+          ³ 114    5  BSF - Generale                   BSF-Generale    DF  ³
+          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+              Cela vous permet alors de visualiser d'un trait les diff‚rentes
+               caract‚ristiques de vos conf‚rences, tant au niveau Spitfire
+               que BSFMAIL.
+
+
+      - [#] : Cette option vous permet d'aller directement … la conf‚rence
+               que vous voulez. Pour cela, lorsque le programme vous demande
+               le num‚ro de la conf‚rence, indiquez-lui et il vous l'
+               affichera. C'est plus pratique que d'utiliser l'option <+>,
+               surtout pour passer de la conf‚rence 1 … 100 !
+
+
+      - [Q]uitter : Lorsque vous voulez quitter ce menu pour revenir au menu
+                     principal, utilisez cette option, vous pressez la touche
+                     ESC. Si vous avez fait des modifications, BSFMGR va vous
+                     demander si vous voulez sauvegardez votre travail,
+                     r‚pondez par Y]es pour sauver le tout.
+
+
+
+
+8d. Protocole De Transfert
+--------------------------
+
+
+  Cette fonction vous permet de configurer les protocoles de transfert
+   utilisables pour le download/upload des fichiers QWK et REP.
+
+  Vous pouvez configurer 10 protocoles, ce que je pense largement suffisant.
+
+  L'‚cran s'affiche comme suivant :
+
+                 ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+                 ³        PROTOCOLE DE TRANSFERT EXTERNE           ³
+                 ³                                                 ³
+                 ³ Protocole #1 Sur 10                             ³
+                 ³                                                 ³
+                 ³    A..Lettre Protocole : Z                      ³
+                 ³                                                 ³
+                 ³    B..Nom Du Protocole : Zmodem (MobyTurbo)     ³
+                 ³                                                 ³
+                 ³    C..R‚ception : dsz.com rz -m                 ³
+                 ³                                                 ³
+                 ³    D..Emission  : dsz.com sz -m                 ³
+                 ³                                                 ³
+                 ³                                                 ³
+                 ³ Votre Choix [A-D], <+>, <->, Q Pour Quitter :   ³
+                 ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+  Les options sont les suivantes :
+
+      - [A] : Lettre du protocole : S‚lectionnez une lettre pour identifier
+                                     le nom du protocole, celle servira …
+                                     l'utilisateur pour s‚lectionner ce
+                                     protocole.
+
+      - [B] : Nom du protocole : Entrez le nom du protocole, ainsi qu'une
+                                  brŠve description si vous avez de la place.
+                                  La taille maximum est de 20 caractŠres.
+
+      - [C] : R‚ception : Entrez le nom du protocole(avec l'extension),
+                           suivit des paramŠtres de transfert en r‚ception.
+                           BSFMAIL utilise cette option pour recevoir les
+                           fichiers REP.
+
+      - [D] : Emmision  : Entrez le nom du protocole (avec l'extension),
+                           suivit des paramŠtres de transfert en ‚mission.
+                           BSFMAIL utilise cette option pour envoyez les
+                           fichiers QWK.
+
+
+  NOTE : Faites attention que les programmes externes de protocoles de
+          transfert se trouvent dans le r‚pertoire de BSFMAIL ou dans votre
+          patch Dos.
+
+
+
+
+8e. Mode De Compression
+-----------------------
+
+  Cette fonction vous permet de configurer les modes de compression
+   utilisables pour le download/upload des fichiers QWK et REP.
+
+  Vous pouvez configurer 10 modes de compression, ce que je pense suffisant.
+
+  L'‚cran s'affiche comme suivant :
+
+                 ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+                 ³         MODE DE COMPRESSION EXTERNE             ³
+                 ³                                                 ³
+                 ³ Compression #1 De 10                            ³
+                 ³                                                 ³
+                 ³    A..Lettre Du Compacteur  : Z                 ³
+                 ³                                                 ³
+                 ³    B..Format De Compression : ZIP               ³
+                 ³                                                 ³
+                 ³    C..Compression      : Pkzip.exe -a -ex       ³
+                 ³                                                 ³
+                 ³    D..D‚compression    : Pkunzip.exe -o         ³
+                 ³                                                 ³
+                 ³                                                 ³
+                 ³ Votre Choix [A-D], <+>, <->, Q Pour Quitter :   ³
+                 ³                                                 ³
+                 ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+  Les options sont les suivantes :
+
+      - [A] : Lettre Du Compacteur : Selectionnez une lettre pour identifier
+                                      le nom du mode de compression, celle
+                                      servira … l'utilisateur pour
+                                      s‚lectionner ce mode de compression.
+
+      - [B] : Format De Compression : Entrez le code du mode de compression,
+                                       3 caractŠres, servant … d‚finir le
+                                       format du mode de compression (ZIP,
+                                       ARJ, RAR, etc...)
+
+      - [C] : Compression   : Entrez le nom du mode de compression (avec l'
+                               extension),suivit des paramŠtres de
+                               compression.
+                               BSFMAIL utilise cette option pour compacter
+                               les fichiers QWK.
+
+      - [D] : D‚compression : Entrez le nom du mode de compression (avec l'
+                               extension), suivit des paramŠtres de
+                               d‚compression.
+                               BSFMAIL utilise cette option pour d‚compacter
+                               les fichiers REP.
+
+
+ NOTE : Faites attention que les programmes externes de compression se
+         trouvent dans le r‚pertoire de BSFMAIL ou dans votre patch Dos.
+
+
+8f. Taille Des Paquets/Messages
+-------------------------------
+
+  *** FONCTION non encore implant‚e. ***
+
+
+
+
+
+8g. Maintenance Des Aides (Version Enregistr‚e uniquement)
+-------------------------
+
+  Cette option vous donne accŠs … l'‚diteur des aides de BSFMAIL. Vous
+   pourrez ainsi lire et modifier ces aides dans les rubriques que vous
+   voulez, pour les modifier … votre guise.
+
+  Les diff‚rentes aides sont class‚es en fonction d'un code principal et
+   d'un code secondaire.
+   Le code principal repr‚sente la menu o— la fonction se trouve. Ils sont
+    au nombre de 3 : - M : Menu g‚n‚ral
+                     - O : Options
+                     - S : S‚lection Des Conf‚rences
+   Le code secondaire correspond … la fonction dans le menu o— vous vous
+    trouvez. Ainsi, si vous vous trouvez dans le menu principal, l'aide
+    sur les download sera : - Code Principal  : M
+                            - Code Secondaire : D
+
+    Pour une aide dans le menu option, ce sera par exemple : - Code Princ : O
+                                                             - Code Secon : A
+
+
+   Dans tous les cas, vous ne pouvez pas changer ces codes dans l'‚diteur. Ils
+    vous permettent simplement de vous diriger.
+
+   L'‚cran d'aides de BSFMAIL est le suivant :
+
+     xxx
+
+
+
+
+
+
+
+
+
+
+   Pour vous d‚placer, utilisez les touches '+' ou '-'.
+   Pour ‚diter un texte d'aide, appuyez sur [E]ditez !
+
+   En mode ‚diteur, la liste des touches est affich‚e en bas de l'‚cran.
+    Les touches sont les suivantes :
+       - ALT+C : Efface la ligne o— vous ˆtes sans d‚caller les lignes
+                  suivantes vers le haut !
+       - ALT+D : Efface la ligne en d‚callant les lignes suivantes.
+       - ALT+I : Insert une ligne.
+       - ENTER : Sort de l'‚diteur en sauvegardant votre travail.
+       -  ESC  : Sort de l'‚diteur sans sauvegarder votre travail.
+
+   Vous ne pouvez modifier que le texte des aides, en aucun cas, vous ne
+    devez modifier les codes et les entˆtes, sans quoi, BSFMAIL ne pourra
+    pas lire les aides.
+
+
+
+
+8h. Statistiques
+----------------
+
+  Cette fonction vous donne un petit aper‡ue des transactions effectu‚es par
+   les utilisateurs de BSFMAIL.
+
+  Voici ce que cela donne :
+
+                 ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+                 ³                 STATISTIQUES                    ³
+                 ³                                                 ³
+                 ³   ş Nombre De Utilisateurs : 78                 ³
+                 ³   ş Total De Connection : 172                   ³
+                 ³                                                 ³
+                 ³   ş Nombre De Paquets Downloaded  : 110         ³
+                 ³   ş Nombre De Paquets Uploaded    : 26          ³
+                 ³   ş Nombre De Messages Downloaded : 185385      ³
+                 ³   ş Nombre De Messages Uploaded   : 377         ³
+                 ³   ş Nombre D'Appel Au SysOp       : 3           ³
+                 ³                                                 ³
+                 ³ Pressez <Q>uit                                  ³
+                 ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+
+
+9. Utiliser BSFMAIL online
+--------------------------
+
+
+  Utiliser BSFMAIL connect‚, c'est … dire Online est des plus simples.
+
+  Lorsqu'un nouveau utilisateur se connecte, BSFMAIL lui envoie, et s'il le
+   trouve, le fichier texte BSFNUSER.CLR/BBS en fonctions de son mode
+   graphique. Dans le mˆme temps, BSFMAIL cr‚‚ une nouvelle fiche pour cet
+   utilisateur.
+
+  Il arrive dans le menu principal o— des choix lui sont propos‚s (Voir le
+   chapitre Menu G‚n‚ral De BSFMAIL). En tant que nouvel utilisateur, il doit
+   se configurer en fonction de son lecteur de courrier offline et de son
+   programme de communication.
+
+  Tout d'abord, il va s‚lectionner l'option Configuration, o— il va modifier
+   la configuration par d‚faut, ensuite, il va configurer le transfert de
+   protocole et le mode de compression pour ˆtre compatible avec ses
+   logiciels. Puis il va s‚lectionner les conf‚rences qu'il d‚sire recevoir
+   chez lui, pour lire les messages tranquillement.
+
+  Une fois tout ceci termin‚, il n'est plus un nouveau utilisateur. il peut
+   donc downloader et uploader les messages comme bon lui semble, en
+   utilisant le protocole de transfert qu'il a choisit, ainsi que le mode de
+   compression/d‚compression choisit.
+
+  Toutefois, c'est une description un peu sommaire, mais plut“t que de lire,
+   il est pr‚f‚rable de temps en temps d'essayer un programme directement !
+   Toutes les commandes possibles de BSFMAIL sont d‚crites dans les chapitres
+   d‚di‚s.
+
+
+
+
+9a. Les commandes des conf‚rences
+--------------------------------
+
+  Les commandes des conf‚rences diffŠrent totalement des autres commandes du
+   fait que vous ne devez plus rentrer qu'une lettre, mais un chiffre ou une
+   chaine de caractŠre. Ceci a ‚t‚ cr‚‚ pour optimiser la configuration des
+   conf‚rence pour l'utilisateur et pour le SysOp, donc un gain de temps
+   trŠs appr‚ciable.
+
+  Les commandes des conf‚rences au niveau de BSFMAIL sont exactement les
+   mˆmes que celles que niveau de BSFMGR.
+
+  Les commandes sont divis‚es en trois : Les principales, les secondaires et
+   les tertiaires.
+
+  En plus de ces commandes ci, il existe la commande Q]uitter pour revenir
+   au menu principal, la commande #x, qui permet de passer directement … la
+   page x et la commande <+/-> qui permet de passer les pages de conf‚rences.
+
+  Les principales d‚finissent les conf‚rences, les secondaires d‚finissent
+   les op‚ration … effectuer sur ces conf‚rences au niveau attribut tandis
+   que les tertiaires jouent sur les pointeurs des conf‚rences.
+
+  ş Les commandes principales sont :
+
+       [#]     : Pour s‚lectionner une seule conf‚rence.
+     [#1 #2]   : Pour s‚lectionner les conf‚rences #1, #2, ...
+      [ALL]    : Pour s‚lectionner toutes les conf‚rences.
+     [RESET]   : Pour d‚s‚lectionner toutes les conf‚rences, sauf celles
+                  forc‚es par le SysOp.
+    [DEFAULT]  : Pour remettre les conf‚rences s‚lectionn‚es par le SysOp.
+    <#1..#2>   : Pour s‚lectionner les conf‚rences de #1 … #2.
+
+
+  ş Les commandes secondaires sont :
+
+      [   ]    : Flagge les conf‚rences choisies en attribut "ALL".
+      [PERSO]  : Flagge les conf‚rences choisies en attribut "PERSONNEL".
+      [YALL]   : Flagge les conf‚rences choisies en attribut "YOURS & ALL".
+      [NONE]   : Flagge les conf‚rences choisies en attribut "NONE".
+      [SIZE]   : Va permettre de d‚finir les pointeurs sur les conf‚rences
+                  choisies en fonction de la commande tertiaire.
+      [NET]    : Flagge les conf‚rences choisies en attribut "NETSTATUS"
+     [NONET]   : EnlŠve les conf‚rences choisies de l'attribut "NETSTATUS"
+
+
+    Lorsqu'un appel sur la fonction SIZE est effectu‚, un bargraphe apparaŒt
+     en bas de l'‚cran pour visualiser l'‚volution de la proc‚dure.
+
+  ş Les commandes tertiaires sont :
+
+      [LOW]    : Mets les pointeurs des conf‚rences au minimum.
+      [HIGH]   : Mets les pointeurs des conf‚rences au maximum.
+       [#]     : Descends les pointeurs de # … partir du maximum.
+
+
+  Tout ceci est assez compliqu‚ … comprendre, c'est pourquoi j'ai fait ce
+   petit sch‚ma pour vous aidez … mieux comprendre :
+
+  ÚÄÄÄÄÄÄÄÄÄ¿                           ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+  ³ #1 #2 ..ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ S‚lectionne La Conf‚rence #1 #2 ..³
+  ÀÄÄÄÄÄÄÄÄÄÙ                           ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+  ÚÄÄÄÄÄÄÄÄÄ¿  ÚÄÄÄÄÄÄÄÄÄ¿              ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+  ³   ALL   ÃÂÄ´         ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ S‚lect les confs avec attr ALL    ³
+  ÀÄÄÄÄÄÄÄÄÄÙ³ ÀÄÄÄÄÄÄÄÄÄÙ              ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+  ÚÄÄÄÄÄÄÄÄÄ¿³ ÚÄÄÄÄÄÄÄÄÄ¿              ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+  ³ #1..#2  ÃÅÄ´  PERSO  ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ S‚lect les confs avec attr PERSO  ³
+  ÀÄÄÄÄÄÄÄÄÄÙ³ ÀÄÄÄÄÄÄÄÄÄÙ              ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             ³ ÚÄÄÄÄÄÄÄÄÄ¿              ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+             ÃÄ´  YALLÿ  ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ S‚lect les confs avec attr YALL   ³
+             ³ ÀÄÄÄÄÄÄÄÄÄÙ              ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             ³ ÚÄÄÄÄÄÄÄÄÄ¿              ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+             ÃÄ´  NONET  ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ D‚s‚lect les confs de l'attr NET  ³
+             ³ ÀÄÄÄÄÄÄÄÄÄÙ              ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             ³ ÚÄÄÄÄÄÄÄÄÄ¿              ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+             ÃÄ´   NET   ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ S‚lect les confs avec attr NET    ³
+             ³ ÀÄÄÄÄÄÄÄÄÄÙ              ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             ³ ÚÄÄÄÄÄÄÄÄÄ¿  ÚÄÄÄÄÄÄÄÄÄ¿ ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+             ÃÄ´  SIZE   ÃÂÄ´   LOW   ÃÄ´ Mets tous les pointeurs au minimum³
+             ³ ÀÄÄÄÄÄÄÄÄÄÙ³ ÀÄÄÄÄÄÄÄÄÄÙ ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             ³            ³ ÚÄÄÄÄÄÄÄÄÄ¿ ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+             ³            ÃÄ´  HIGH   ÃÄ´ Mets tous les pointeurs au maximum³
+             ³            ³ ÀÄÄÄÄÄÄÄÄÄÙ ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             ³            ³ ÚÄÄÄÄÄÄÄÄÄ¿ ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+             ³            ÀÄ´    #    ÃÄ´ Mets les pointeurs … : Maximum-#  ³
+             ³              ÀÄÄÄÄÄÄÄÄÄÙ ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             ³ ÚÄÄÄÄÄÄÄÄÄ¿              ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+             ÀÄ´  NONE   ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ D‚s‚lect les confs des attributs  ³
+               ÀÄÄÄÄÄÄÄÄÄÙ              ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+  ÚÄÄÄÄÄÄÄÄÄ¿                           ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+  ³  RESET  ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ D‚s‚lectionne toutes les confs    ³
+  ÀÄÄÄÄÄÄÄÄÄÙ                           ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+  ÚÄÄÄÄÄÄÄÄÄ¿                           ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+  ³ DEFAULT ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ Remets la configuration d'origine ³
+  ÀÄÄÄÄÄÄÄÄÄÙ                           ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+  Lorsqu'un appel sur la fonction SIZE est effectu‚, un bargraphe apparait
+   en bas de l'‚cran pour visualiser l'‚volution de la proc‚dure.
+  La Commande ALL NONE est ‚quivalente … la commande RESET.
+
+
+
+
+  Quelques exemples :
+
+    ş ALL            : S‚lectionne toutes les conf‚rences disponibles avec
+                        l'attribut ALL.
+    ş 16..32 ALL     : S‚lectionne les conf‚rences 16 … 32 disponibles avec
+                        l'attribut ALL
+    ş 16..32 NONE    : D‚s‚lectionne les conf‚rences 16 … 32.
+    ş RESET          : Equivalent … un ALL NONE : D‚selectionne toutes les
+                        conf‚rences, seules restent celles forc‚es par le
+                        SysOp.
+    ş ALL SIZE HIGH  : Remet tous les pointeurs au maximum dans toutes les
+                        conf‚rences poss‚dant un attribut.
+    ş 12..32 SIZE 10 : Remet les pointeurs … (Maximum - 10) pour les
+                        conf‚rences 12 … 32 disponibles.
+    ş DEFAULT        : Remet la configuration de d‚faut s‚lectionn‚e par
+                        le SysOp.
+    ş 1 3 5 9 12 55  : S‚lectionne les conf‚rences 1, 3, 5, 9, 12 & 55.
+
+    ş ALL NET        : Mets toutes les conf‚rences en status NET.
+
+
+
+9b. Les attributs des conf‚rences
+--------------------------------
+
+  Pour pouvoir satisfaire tous les utilisateurs, BSFMAIL possŠde une
+   proc‚dure de tri qui permet de s‚lectionner tel ou tel message au niveau
+   des conf‚rences.
+
+  Ces attributs sont au nombre de quatre : ş ALL
+                                           ş YALL
+                                           ş PERSO
+                                           ş NET
+
+  L'attribut ALL, repr‚sent‚ par un "A" en face des conf‚rences, signifie
+   que tous les messages scann‚s de cette conf‚rence vont ˆtre inclue dans
+   le paquet de courrier, sauf ceux qui sont personnels et non destin‚s …
+   l'utilisateur.
+
+  L'attribut YALL, abr‚viation de "YOURS & 'ALL'", repr‚sent‚ par un "Y" en
+   face des conf‚rences, signifie que lors du scanne des messages de cette
+   conf‚rence, seules les messages ayant comme destinataire 'ALL' ou le nom
+   de l'utilisateur sera incorporer dans le paquet de messages.
+
+  L'attribut PERSO, abr‚viation de PERSONNEL, repr‚sent‚ par un 'P' en face
+   des conf‚rences, signifie que seules les messages destin‚s … l'utilisateur
+   vont ˆtre incorpor‚s dans le paquet qu'il recevra.
+
+  L'attribut NET, abr‚viation de NETSTATUS, repr‚sent‚ par un 'N' en face des
+   conf‚rences, signifie que les conf‚rences poss‚dant ce status pourront
+   ˆtre redistribu‚es sur d'autre BBS. Pour cela, veuillez lire le chapitre :
+   'Configuration en HUB'.
+
+
+
+
+
+9c. Les options des utilisateurs
+-------------------------------
+
+  Les options permettent de configurer au mieux optimiser les donn‚es inclues
+   dans le paquet de messages, que l'utilisateur pourra consulter chez lui
+   hors connexion.
+
+  Les options sont les suivantes :
+
+    - Inclure la page de pr‚sentation :  Cette page repr‚sente l'‚cran
+       d'accueil qu'il verra sur son lecteur de courrier offline. Vous pouvez
+       mettre la page de pr‚sentation de votre BBS, ou toute autre page,
+       ASCII ou ANSI, comme vous voulez.
+
+    - Inclure les bulletins : Dans divers lecteurs de courrier offlline, une
+       option bulletin existe, permettant de lire chez soit les bulletins
+       cr‚‚s par le BBS. Tout comme Spitfire, BSFMAIL n'inclue que les
+       derniers bulletins cr‚‚s … partir de la date du dernier paquet envoy‚.
+
+    - Inclure la page des nouvelles : Tout comme l'option pr‚c‚dente, une
+       option existe dans les lecteurs de courrier offline : 'SysOp News',
+       permettant de lire les nouvelles cr‚‚es par le SysOp. G‚n‚ralement,
+       on inclut le fameux SFNWSLTR.BBS de Spitfire... Mais tout autre
+       nouvelles peut ˆtre mise … la place, il suffit juste de l'indiqu‚.
+       Attention: Pour cette page, il faut absolument prendre celle en ASCII.
+
+    - Inclure les nouveaux fichiers : Cette option permet … l'utilisateur de
+       regarder sur son lecteur de courrier offline la liste des derniers
+       fichiers mis sur le serveur. TrŠs pratique en gain de temps surtout.
+       BSFMAIL supporte le multi-ligne, la description des fichiers se fera
+       donc comme pour Spitfire.
+
+    - Inclure la page de fin : Lorsque qu'un utilisateur sort du paquet qu'il
+       lisait, une page de fin peut ˆtre visualiser sur son lecteur de
+       courrier offline. Vous pouvez ‚mettre la page de fin de votre BBS, ou
+       tout autre page, en mode ASCII et ANSI, comme vous voulez.
+
+    - Utiliser un petit CONTROL.DAT : Ce fichier repr‚sente le coeur du paquet
+       de messages, il y inclue le nombre de conf‚rences, leurs descriptions,
+       le nombre de messages, ainsi que les informations de l'utilisateur.
+       En mettant cette option sur OUI, seule la description des conf‚rences
+       poss‚dant des messages va ˆtre incluse. L'utilisateur ne verra pas l'
+       ensemble des conf‚rences que vous avez sur le BBS, mais seulement
+       celles poss‚dant des messages dans le paquet.
+
+    - Envoyer les fichier NDX : Ces fichiers sont des fichiers pointeurs
+       servant … diff‚rencier les diff‚rents messages des conf‚rences.
+       G‚n‚ralement, les lecteurs de courrier offline sont capables de
+       recr‚er ce fichier.
+
+    - Envoyer les informations utilisateur : Si vous le d‚sirez, toutes les
+       informations de l'utilisateur, tel que le nombre de fichiers download‚
+       upload‚, le nombre de connexion, la s‚curit‚, ... peuvent ˆtre
+       inclues dans le fichier CONTROL.DAT. Vous pourrez alors les visualiser
+       si votre lecteur de courrier offline le supporte.
+
+    - Utiliser la date courante : Cette option sert au retour des messages,
+       inclue dans le fichier REP. Lorsque l'utilisateur uploade son courrier,
+       les messages qu'il contient ne sont pas tous de la date d'aujourd'hui.
+       Cette option sert donc … mettre … jour la date des messages upload‚s.
+
+    - Mode Expert : Si cette option est sur OUI, les commentaires que
+       BSFMAIL devra afficher ne seront pas afficher. Seule la ligne
+       de commande sera affich‚.
+
+    - Prescan : Si cette commande est valide, les paquets pourront ˆtre
+       pr‚parer … l'avance lors d'une ‚vent. Ils seront ensuite stock‚s dans
+       un r‚pertoire d‚fini dans le .CFG.
+
+    - R‚p‚ter Prescan : Si cette commande est valide ansi que la commande
+       prescan, BSFMAIL va ajouter les nouveaux messages lus … l'ancien
+       prescan. Sinon, il va effacer l'ancien prescan, et repr‚parer le
+       paquet pour l'utilisateur.
+
+    - Download Fichier : Si cette option est sur OUI, le utilisateur pourra
+       downloader les fichiers rattach‚s aux messages lors du scanne des
+       messages.
+     (*** Commande non encore valide ***)
+
+    - Upload Fichier : Si cette option est sur OUI, le utilisateur pourra
+       uploader les fichiers rattach‚s … ces messages lors de l'upload de ces
+       messages par le fichier REP.
+     (*** Commande non encore valide ***)
+
+    - Autoriser le download de fichier : Si cette commande est sur OUI, l'
+       utilisateur pourra downloader un fichier du serveur par la door
+       BSFMAIL. Pour cela, il lui faudra ‚crire un message … BSFMAIL, et s'il
+       … l'autorisation n‚cessaire, BSFMAIL lui transf‚rera ce fichier lors
+       du download du prochain paquet.
+     (*** Commande non encore valide ***)
+
+    - Autoriser l'upload de fichier : Si cette commande est sur OUI, l'
+       utilisateur pourra uploader un fichier sur le serveur. Pour cela, il
+       lui faudra ‚crire un message … BSFMAIL, qui l'avertira lorsqu'il
+       pourra uploader le fichier.
+     (*** Commande non encore valide ***)
+
+
+9d. L'option Prescan
+--------------------
+
+  Cette option est particuliŠrement utile lorsqu'un utilisateur va chercher
+   sa messagerie quotidiennement. Elle permet de effet de lui pr‚parer son
+   paquet de courrier … l'avance, r‚duisant ainsi le temps de connexion (donc
+   sa facture de t‚l‚phone).
+
+  Pour mettre cette fonction valide, il faut que l'utilisateur se configure
+   lui-mˆme en prescan dans le menu Option de BSFMAIL. Deux options lui sont
+   offertes : Prescan & R‚p‚ter Prescan.
+   L'option 'R‚p‚ter Prescan' ne peut ˆtre valide que si l'option 'Prescan'
+    est valide, ce qui est tout … fait normal !
+
+  Lorsque vous aurez des utilisateurs poss‚dant cette option valide (vous
+   par exemple), vous lancerez la commande BSFMAIL PRESCAN, manuellement ou
+   lors d'une event...
+   BSFMAIL va d'abord v‚rifier les utilisateurs de base de BSFMail (comme la
+    fonction VERIFY) pour ‚viter toutes confusions avec d'autres utilisateurs,
+    ou faire un paquet de messages pour un utilisateur qui n'existe plus dans
+    la base de votre BBS !
+
+  Une fois cette petite v‚rification fini, BSFMAIL va scann‚ les messages
+   pour vos utilisateurs. S'il ne trouve rien (pas de messages, de bulletins,
+   de nouveaux fichiers), il ne va pas cr‚er de fichier. Dans le cas
+   contraire, il va cr‚‚ un fichier QWK dans le r‚pertoire que vous avez
+   d‚fini comme ‚tant celui du r‚pertoire prescan dans le .CFG sous un
+   num‚ro. Si vous poss‚dez 4DOS, BSFMAIL va inscrire le nom de l'utilisateur
+   dans le description du fichier.
+
+  Lorsque l'utilisateur va revenir plus tard pour chercher son paquet de
+   messages, il va voir … l'‚cran le message suivant :
+
+            Pr‚Scanne de 100 K En Attente... <D> Pour le Downloader
+                                             <R> Pour L'Effacer
+
+  Comme vous pouvez le voir, BSFMAIL donne la taille du fichier pr‚scann‚,
+   ce qi peut ˆtre utile de temps en temps, surtout si le fichier fait
+   plusieurs Mo !
+
+  A partir de l…, deux options s'offrent … l'utilisateur :
+   - S'il d‚sire downloader le paquet, BSFMAIL va lire dire le nombre de
+      messages scann‚s ainsi que le nombre de messages pour lui. il pourra
+      s'il le d‚sire le downloader ou non.
+   - S'il d‚sire l'‚ffacer, BSFMAIL va lui demander confirmation. Si ‡a
+      r‚ponse est positive, BSFMAIL redescendra les pointeurs messages et
+      effacera le fichier prescan.
+
+  Cette commande est trŠs utile dans certains cas, notamment si vous ˆtes HUB,
+   mais pour un utilisateur, il faut qu'il se connecte assez souvent, sinon
+   votre disque risque d'ˆtre plein assez vite. Je n'ais pas encore inclus
+   de confirmation par le SysOp, mais cela viendra trŠs prochainement.
+
+
+
+
+10. BSFMAIL en mode local
+-------------------------
+
+  En utilisant BSFMAIL en mode local, peu de choses changent par rapport …
+   une connexion normale.
+
+  Vous devez copier le fichier DOOR.SYS de Spitfire dans le r‚pertoire de
+   BSFMAIL. Pour cela, connectez-vous sur votre BBS en mode local, ensuite,
+   lorsque vous ˆtes dans le session g‚n‚rale, passez sous DOS et copiez le
+   fichier DOOR.SYS dans le r‚pertoire de BSFMAIL.
+    (Ex : COPY DOOR.SYS C:\BSFMAIL).
+   Vous ne devez faire cela que si le fichier n'est pas pr‚sent dans le
+    r‚pertoire de BSFMAIL!
+
+  Les commandes sont exactement les mˆmes. Seule diff‚rence, le protocole n'
+   est plus utilis‚ et les fichiers sont pris dans le r‚pertoire choisit pour
+   le QWK.
+
+  La ligne de commande est : BSFMAIL.EXE Local
+
+  PS : Si vous modifier la configuration de Spitfire, Effacez le fichier
+        DOOR.SYS et recommencez l'op‚ration.
+
+
+
+
+11. BSFMAIL en mode automatique
+-------------------------------
+
+  Si le r‚pertoire de BSFMAIL ne contient pas le fichier DOOR.SYS, lisez le
+   chapitre pr‚c‚dent.
+
+  En mode automatique, BSFMAIL possŠde quatres commandes : ş DOWNLOAD
+                                                           ş UPLOAD
+                                                           ş PRESCAN
+                                                           ş VERIFY
+
+  En mode DOWNLOAD automatique, BSFMAIL va vous pr‚parer un paquet de
+   messages et va le placer dans le r‚pertoire d‚finit pour le QWK, et finira
+   en mettant … jour les pointeur.
+  S'il n'y a pas de messages, BSFMAIL ne cr‚era pas de paquet QWK.
+  Si BSFMAIL trouve dans le r‚pertoire un fichier QWK, il va renommer le
+   fichier QWK en QW0, ou QW1, etc... jusqu'… QW9.
+  Si votre r‚pertoire contient d‚j… 11 fichiers QWK (c'est … dire de QWK …
+   QK9), BSFMAIL ne va pas rajouter ce fichier, les pointeurs ne vont pas
+   ˆtre mis … jour.
+
+  En mode UPLOAD automatique, BSFMAIL va chercher si le r‚pertoire QWK
+   contient un fichier REP.
+  S'il le trouve, BSFMAIL va prendre ce fichier et ins‚rer les messages dans
+   les conf‚rences d‚di‚es. Il va ensuite effacer le fichier REP du
+   r‚pertoire QWK.
+  Si ne trouve pas de fichier REP, BSFMAIL indiquera qu'il n'y a pas de
+   fichier REP et ressortira sous DOS.
+
+  En mode PRESCAN automatique, BSFMAIL va cr‚er un paquet QWK de messages
+   pour tous les utilisateurs ayant l'option prescan active. Pour plus de
+   d‚tails, referez-vous … la section 'Option Prescan'.
+
+  En mode VERIFY automatique, BSFMAIL va chercher si tel ou tel utilisateur
+   de BSFMAIL existe dans la base messagerie de votre BBS. S'il ne le trouve
+   pas, il va effacer la fiche de l'utilisateur.
+
+  Dans tous les cas, le fichier DOOR.SYS doit ˆtre pr‚sent dans le r‚pertoire
+   de BSFMAIL !
+
+
+
+
+12. Configuration en HUB
+------------------------
+
+  BSFMAIL peut ˆtre utiliser comme HUB sur un r‚seau QWK Compatible. Pour
+   ˆtre HUB sur un r‚seau, vous n'avez que peut de choses … faire : Donner
+   l'accŠs NETSTATUS … l'utilisateur qui va poller chez vous, et lui mettre
+   les conf‚rences que vous voulez qu'il prenne en NET status.
+
+  Pour donner … l'utilisateur l'accŠs Netstatus, utilisez la maintenance
+   des utilisateurs dans BSFMGR, d‚finissez le en Netmail status dans les
+   options et flaggez les conf‚rences voulues en NET.
+
+  L'utilisateur est incapable de se mettre en Netstatus:C'est une protection.
+   Vous ne voudrez s–rement pas que tous les utilisateurs se mettent en
+   status Netmail et qu'ils puissent incorporer votre base messagerie chez
+   eux !
+
+  Lorsque les conf‚rences sont flagg‚es, le NetUser pourra les prendre ou
+   non, … son choix.
+
+  Lors des uploads, si l'utilisateur uploade un paquet en Netstatus et que
+   celui-ci ne possŠde pas ou plus le Netstatus, BSFMAIL refusera de l'
+   incorporer dans sa base messagerie.
+
+  BSFMAIL supporte une infinit‚ de NetNode, autant que la base utilisateur de
+   BSFMAIL puisse contenir d'utilisateurs.
+
+  En tant que HUB, vous avez donc la responsabilit‚ de vos Netnodes. Faites
+   attention … ce qu'ils font, et remettez les … l'ordre si n‚cessaire. En
+   tant que NetNodes, ils ont accŠs … tous les messages, mˆme les messages
+   priv‚s.
+
+
+
+
+13. BSFMAIL en multi nodes
+--------------------------
+
+  BSFMAIL a ‚t‚ cr‚‚ de fa‡on … pouvoir marcher sans problŠme en multi-node.
+   Tous les accŠs fichiers sont donc minimis‚s. BSFMAIL utilise une routine
+   de partage compatible avec le SHARE.EXE du DOS.
+
+  La configuration en multi-nodes de BSFMAIL est des plus simples. Vous
+   pouvez cr‚er un unique r‚pertoire BSFMAIL pour tous vos nodes, puisque
+   BSFMAIL peut partager tous ces fichiers.
+
+  Les deux seules … faire est de cr‚er un fichier CFG par node, par exemple
+   BSFMAIL1.CFG et BSFMAIL2.CFG, o— vous ferez attention au r‚pertoire et
+   lecteurs. Ensuite, vous devez inclure dans l'environnement la variable
+   BSFMAIL ou vous indiquerez o— se trouve le le fichier CFG du node.
+     Par ex : ş NODE 1 -> BSFMAIL=C:\BSFMAIL\BSFMAIL1.CFG
+              ş NODE 2 -> BSFMAIL=B:\BSFMAIL\BSFMAIL2.CFG
+   Utilisez BSFMGR pour faire ses manipulations...
+
+  Faites attention au r‚pertoire qui peuvent changer d'un node … l'autre !!!
+
+  Et c'est fini. BSFMAIL se charge de cr‚er les fichiers temporaires.
+
+
+
+
+14. Notes de l'auteur et remerciements
+--------------------------------------
+
+   BSFMAIL et BSFMGR m'ont pris environ 6 mois pour ˆtre d‚velopp‚. Tout …
+    ‚t‚ ‚crit, y compris la routine de communication... Pour l'instant,
+    il n'est encore qu'… la phase bˆta de son d‚veloppement, des problŠmes
+    subsistent, c'est sur, mais j'espŠre les enlever trŠs rapidement.
+
+   Un grand merci … St‚phane Boudin qui a su me dire o— ‚tait les bugs de
+    BSFMAIL et de BSFMGR, et qui a su me remonter le moral de temps en temps,
+    surtout au t‚l‚phone, … des heures indues !!!
+
+   Un grand merci aussi … Thierry Giorgetti pour m'avoir prˆt‚ son
+    standard t‚l‚phonique, sans quoi mes notes de t‚l‚phone aurait quadrupl‚ !
+
+   Un remerciement … mes alpha/bˆta testeurs qui ont tortur‚ BSFMAIL &
+    BSFMGR dans tous les sens pour en enlev‚ la majorit‚ des bugs :
+
+         ş St‚phane Boudin   : Out-Time BBS
+         ş Thierry Giorgetti : Hill-Valley BBS
+
+   Et … Jean-Christophe Peyrard (Alias BBS) et … Stef Evain ( ex-Alf BBS)
+    pour leurs id‚es qu'ils m'ont apport‚s.
+
+   Les marques cit‚es dans cette documentation sont des marques d‚pos‚es :
+
+     ş BSFMAIL/BSFMGR, Copyright De Fr‚d‚ric Ribau.
+     ş SPITFIRE de Buffalo Creek Software, Copyright De Mike Woltz.
+     ş PKZIP/PKUNZIP, copyright PKWare et Phil Katz.
+     ş DSZ, copyright de Omem Technology, Inc.
+     ş OLX, copyright de Mustang Software, Inc.
+     ş EZ-Reader, de Thumper Technologies, copyright de Eric Cockrell.
+     ş RoseReader, copyright de Vic Kass.
+     ş Session Manager, copyright de Patrick W. Hart.
+     ş Power-QWK, copyright de Gale Green.
+     ş MegaMail Reader, copyright de Kip Compton.
+     ş KingQWK, copyright de Mike King.
+     ş Speed Read, copyright de Jim Smith.
+     ş Power-QWK, copyright de Gale Green.
+     ş WinQwk, copyright de Doug Crocker.
+     ş WinRead, copyright de Ollivier Civiol.
+    
+
+
+
+15. Index
+---------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

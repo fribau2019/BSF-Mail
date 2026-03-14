@@ -1,0 +1,315 @@
+
+    There is certain information that is required for those interested
+in writing utilities and other third party type programs for SPITFIRE.
+Listed below are the Turbo Pascal record types that SPITFIRE uses.
+
+    When a caller goes through a Door or uses any of the Sysop
+configurable features from each menu, SPITFIRE creates a simple
+text file named SFDOORS.DAT, SFMAIN.DAT, SFMESS.DAT or SFFILE.DAT in
+the SPITFIRE HOME directory.  This text file contains necessary
+information for the caller to return to SPITFIRE.  The text file is
+erased when control is returned to SPITFIRE.  The following page
+contains a list of the information written to each line of the text
+file:
+
+Global record structure for SPITFIRE version 3.51.
+Copyright 1996, Buffalo Creek Software - All rights reserved.
+
+Buffalo Creek Software
+913 - 39th Street
+West Des Moines, Iowa 50265
+
+(* SFDOORS.DAT *)
+User Number (* the record number in SFUSERS.DAT of the caller       *)
+User Name   (* the full name of the caller                          *)
+Password    (* the password of the caller                           *)
+First Name  (* the first name of the caller                         *)
+Baud Rate   (* baud rate of the caller - i.e. 2400 { 0 if local }   *)
+Comm port   (* COMM port being used by SPITFIRE                     *)
+Time Left   (* number of minutes the caller has left this log-on    *)
+Time        (* number seconds since midnight when entering the door *) 
+Path        (* the path in which SPITFIRE.EXE resides {C:\SF\}      *)
+Ansi_On     (* TRUE if caller is using ANSI else FALSE              *)
+SecLevel    (* the security level of the caller                     *)
+Uploads     (* the number of uploads the caller has made            *)
+Downloads   (* the number of downloads the caller has made          *)
+This Time   (* total number of minutes allowed for this call        *)
+Time On     (* number of seconds since midnight when logged on      *)
+Extra Time  (* number of seconds the caller has gained since log-on *)
+Sysop Next  (* TRUE if Sysop next feature has been activated        *)
+Front End   (* TRUE if SPITFIRE was booted from a front end program *)
+No DTE Lock (* TRUE if configured for Software Data Flow Control    *)
+MaxBaud     (* maximum baud of the system                           *)
+ErrCorrect  (* TRUE if error correction connection                  *)
+LastMConf   (* last message conference                              *)
+LastFArea   (* last file area                                       *)
+Node Number (* Node on which the caller is logged                   *)
+DLs Per Day (* Number of files allowed to be downloaded per day     *)
+DLs Today   (* Number of files the caller has downloaded this day   *)
+Daily Bytes (* Number of downloadable bytes per day                 *)
+Bytes Today (* Number of bytes the caller has downloaded this day   *)
+TotalUK     (* Number of K bytes uploaded by the caller             *)
+TotalDK     (* Number of K Bytes downloaded by the caller           *)
+Phone #     (* The callers phone number                             *)
+City/State  (* The callers city and state                           *)
+Log On Time (* Number of minutes allowed per day                    *)
+RIP_On      (* TRUE if caller is using RIP Graphics else FALSE      *)
+Page Status (* TRUE if caller has <P>aged the Sysop                 *)
+Chat Time   (* Number of minutes allowed per chat                   *)
+IRQ         (* IRQ being used                                       *)
+Base Address(* Base Address being used                              *)
+Sub Date    (* The callers subscription date                        *)
+ 
+
+TYPE
+  PrivSecArray  = Array[1..5] Of Integer;
+  UserDefaults  = (HotKey,Reserved,Pause);
+
+(* SFMSG[x].PTR *)
+MessagePtr    = Record
+                  MDate            : String[17];
+                  FromWho,
+                  ToWho,
+                  OrgTo            : String[30];
+                  Subject          : String[40];
+                  NetMail,
+                  MsgSent,
+                  Available,
+                  ThreadMsg,
+                  ThreadStart,
+                  Private,Deleted,
+                  Received         : Boolean;
+                  Where,
+                  NumberofRecords  : Word;
+                  Conference       : Integer;
+                  MsgNumber,
+                  OrgMsgNumber     : LongInt;
+                  QWK_ID           : String[8];
+                  QWK_Delete_Org   : Boolean;
+                  DupChkCRC        : LongInt;
+                  FireNetReserved  : Array[0..26] Of Char;
+                  NetRoute         : String[16];
+                  Extra            : Array[0..23] Of Byte;
+                End;
+
+(* SFMSG[x].IDX *)
+MessageIdx    = Record
+                  FromWhoCRC,
+                  ToWhoCRC,
+                  MsgNumber,
+                  OrgMsgNumber : LongInt;
+                End;
+
+(* SFMSG[x].DAT *)
+MessageBody   = Record
+                  MsgData : String[127];
+                End;
+
+(* SFFAREA.DAT *)
+FileSystem    = Record
+                  FSec          : Integer;
+                  FDesc         : String[40];
+                  FilePath,
+                  UploadPath    : String[60];
+                  ShowToAll,
+                  FEqual,
+                  CDRom,
+                  SearchArea,
+                  FreeDLArea    : Boolean;
+                  PrivSec       : PrivSecArray;
+                  Extra         : Array[1..76] Of Byte;
+                End;
+
+(* SFMCONF.DAT *)
+MsgSystem     = Record
+                  MSec           : Integer;
+                  NetMailConf    : Boolean;
+                  MDesc          : String[40];
+                  MEqual,
+                  PublicMsgConf,
+                  AllowDelete,
+                  PackUnReceived : Boolean;
+                  DaysOld        : Word;
+                  DelOldThdMsg   : Boolean;
+                  NoOfLines      : Word;
+                  OneExtra       : Boolean;
+                  PrivSec        : PrivSecArray;
+                  MsgEntrySec    : Word;
+                  Extra          : Array[1..44] Of Byte;
+                  AllowNetRoute,
+                  MarkAsSent     : Boolean;
+                  NetIDName      : String[15];
+                End;
+
+(* SFMSG[X].LMR *)
+LastMessage   = Record
+                  LMsgRed : LongInt;
+                End;
+
+(* SFUSERS.PTR *)
+UsersPtr      = Record
+                  Name : String[30];
+                End;                  
+
+(* SFUSERS.DAT *)
+Users         = Record
+                  UserName,
+                  CallingFrom      : String[30];
+                  Password,
+                  TimeDate         : String[14];
+                  PhoneNumber      : String[12];
+                  BirthDate        : String[8];
+                  SecurityLevel    : Integer;
+                  Uploads,
+                  Downloads,
+                  TotalUK,
+                  TotalDK          : LongInt;
+                  TimesOn,
+                  TimeLeft,
+                  Last_M_Conf,
+                  Last_F_Area,
+                  TransPro         : Integer;
+                  Defaults         : Set Of UserDefaults;
+                  FirstLogDate     : String[8];
+                  SubscriptionDate : LongInt;
+                  ConfQueue        : Array[0..97] Of Byte;
+                  QWK_BBS_ID       : String[8];
+                  AllowPurge,
+                  BadLastOff,
+                  ScrollBack,
+                  Xpert,
+                  LockedOut,
+                  Deleted          : Boolean;
+                  Linelen,
+                  Pagelen,
+                  OnToday,
+                  Illegal,
+                  DLToday,
+                  ForeGround,
+                  FreeDLToday      : Byte;
+                  ChatsAllowed     : Byte;
+                  DLBytes          : LongInt;
+                  NewFCheck        : String[8];
+                  OrgSecurity      : Integer;
+                  ChatsUsed,
+                  ExtraByte        : Byte;
+                  FileStr          : String[12];
+                  FileArea         : Word;
+                  DeleteFile       : Boolean;
+                  MsgsLeft         : Word;
+                  Extra            : Array[1..3] Of Byte;
+                End;
+
+(* SFEVENTS.DAT *)
+EventSchedule = Record
+                  Active    : Byte;
+                  DoneToday : Boolean;
+                  Time      : Real;
+                  WhichDay  : Byte;
+                End;
+
+(* SFSYSTEM.DAT *)
+SysRec        = Record
+                  NoInputTime       : Byte;
+                  CallsToday,
+                  MsgToday,
+                  UpToday,
+                  DownToday,
+                  DailyLimit,
+                  DailyLogons,
+                  LogonLimit,
+                  SysopSecurity,
+                  NUS,
+                  NUTL              : Word;
+                  UpDskSpace        : LongInt;
+                  MaxUsers          : Word;
+                  FileDescAmt       : Byte;
+                  SrchRomSFFILE     : Boolean;
+                  DoorsAmt          : Integer;
+                  Callernum         : LongInt;
+                  LastDate          : String[8];
+                  StartDate         : String[18];
+                  DOSPassword       : String[28];
+                  SysopName,
+                  SysMsgName        : String[30];
+                  USPhone,
+                  ConvertDesc,
+                  HeySysop,
+                  AddUpedBy,
+                  CommentQue        : Boolean;
+                  NumberOfNodes,
+                  NUCallers2Day     : Byte;
+                  BootUpTests,
+                  ScanAllMsg,
+                  OfferDefault      : Boolean;
+                  ViolationSec      : Integer;
+                  NUBirthDate,
+                  CompFileSrch,
+                  DrRetPassword,
+                  RIPAvailable,
+                  UseIntl,
+                  MandatoryMsgScan,
+                  ShowCommandLines  : Boolean;
+                  DefaultANSIColor  : Byte;
+                  ExtraBytes        : Array[0..81] Of Byte;
+                End;
+
+(* SFWHOSON.DAT *)
+NodesDat      = Record
+                  UserNo : Integer;
+                  Mode   : Char;
+                  DBytes : Array[1..3] Of Byte;
+                End;
+
+(* SFNODE.DAT *)
+NodeSysRec    = Record
+                  DirectScrn,
+                  ShowResult    : Boolean;
+                  RAMDrive      : Char;
+                  PrinterOn,
+                  AnsiAvl,
+                  Private,
+                  SecondPassword,
+                  Page_On       : Boolean;
+                  MinimumBaud   : Word;
+                  MsgInfo,
+                  NewFileInfo,
+                  SoftControl,
+                  DTR_Hangup    : Boolean;
+                  CorrectionMsg : String[3];
+                  WorkPath,
+                  DisplayPath,
+                  ExtranPath,
+                  MsgPath       : String[28];
+                  ModInitStr    : String[56];
+                  ComPort       : Word;
+                  RingNo,
+                  Node          : Byte;
+                  MaxBaud,
+                  ExtraLong     : LongInt;
+                  TimeComp      : Real;
+                  LastDate      : String[8];
+                  PrivateSec    : Integer;
+                  HangUpDelay   : Byte;
+                  UseHiSpeed,
+                  AvailBoolean  : Boolean;
+                  IRQ1,
+                  IRQ2,
+                  IRQ3,
+                  IRQ4,
+                  IRQ5,
+                  IRQ6,
+                  IRQ7,
+                  IRQ8          : Byte;
+                  BreakLen      : Word;
+                  FAXConnectMsg : String[7];
+                  PreInitStr    : String[6];
+                  SubChgSec     : Word;
+                  StartWarn     : Byte;
+                  ExtraBytes    : Array[0..3] Of Byte;
+                  ColorMonitor  : Boolean;
+                  OffHookStr    : String[6];
+                  ComBase       : Array[1..8] Of Word;
+                  AnswerStr     : String[30];
+                  NewExtra      : Array[0..201] Of Byte;
+                End;

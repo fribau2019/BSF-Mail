@@ -1,0 +1,13 @@
+Ú BSFMAIL ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³                                     ³
+³   BSFMAIL - Door Courrier Offline   ú
+³        Pour Spitfire 3.5            B
+³     -== Version 1.00á06 ==-         S
+³                                     F
+³   Plus de 768 Conf‚rences !        M
+³   Net Status / Prescan / ...       A
+³   Fonctions Optimis‚es.            I
+³   Et Pleins D'autres Choses!       L
+³                                     ú
+³  La Meilleure Door Pour Spit !      ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ

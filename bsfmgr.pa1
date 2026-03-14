@@ -1,0 +1,257 @@
+{$M 65000,0,262144}
+
+{$I E:\SOURCE~1\PASCAL\NETMAIL\LANGAGE.DIR}
+
+USES
+     CRT,              {Unit CRT}
+     DOS,              {Unit DOS}
+     MGRFade,          {Unit MGR-Fade        - Fade In & Out }
+     MGRCompr,         {Unit MGR-Compression - Type De Compacteurs}
+     MGRProto,         {Unit MGR-Protocoles  - Protocoles De Transfert}
+     MGRConfs,         {Unit MGR-Conferences - Choix Des Conferences}
+     MGRUsers,         {Unit MGR-Users       - Fiches Users}
+
+     MGRCfg,           {Unit MGR-Config      - Configuration Des .CFG}
+     MGRStats,         {Unit MGR-Stats       - Stats Sur Les Users}
+     MGRHelp,          {Unit MGR-Help        - Maintenance Des Aides}
+     MGRExImp,         {UNIT MGR-(Ex/Im)port - Maintenance Des Echanges}
+     BSFUtils,
+     BSFError,
+     MGRMenu,
+     MGRDeflt,
+     MGRVaria;         {Unit MGR-Variables   - Variables}
+
+CONST DernierePos : Byte = 0;
+
+Var Position       : String;
+    F              : Text;
+    S              : String;
+
+{-----------------------------------------------------------------------}
+Function Pop : String;
+
+Var Y 	: Integer;
+    C 	: Char;
+    Fin : Boolean;
+    Ligne : String[39];
+    Blanc : Byte;
+
+Begin;
+ Y := 12 + DernierePos;
+ Fin := False;
+ Repeat
+  TextBackGround(3);
+  TextColor(11);
+
+  GotoXY(20,Y);
+  Blanc := ((39 - Length(Menu[Y-12,1])) Div 2);
+  Ligne := Rep(' ', Blanc)+Menu[Y-12,1]+Rep(' ', Blanc);
+  Write(Ligne);
+
+   C := Upcase(Readkey);
+
+   If C = #80 Then Begin;
+			  TextBackGround(0);
+			  TextColor(11);
+			  GotoXY(20,Y);
+                          Ligne := Rep(' ', Blanc)+Menu[Y-12,1]+Rep(' ', Blanc);
+                          Write(Ligne);
+			  Y := Y + 1;
+		   End;
+
+   If C = #72 Then Begin;
+			  TextBackGround(0);
+			  TextColor(11);
+			  GotoXY(20,Y);
+                          Ligne := Rep(' ', Blanc)+Menu[Y-12,1]+Rep(' ', Blanc);
+                          Write(Ligne);
+			  Y := Y - 1;
+		   End;
+
+   If C = #13 Then Begin;
+   	            TextBackGround(0);
+		    TextColor(11);
+		    GotoXY(20,Y);
+                    Ligne := Rep(' ', Blanc)+Menu[Y-12,1]+Rep(' ', Blanc);
+                    Write(Ligne);
+                    Fin := True;
+                   End;
+
+   If C = #27 Then Begin;
+                    Y := 12+Maxmenu;
+                    Fin := True;
+                   End;
+
+ If Y = 11 Then Y := Y + MaxMenu + 1;
+ If Y = 13 + MaxMenu Then Y := 12;
+ Until Fin = True;
+ Pop := Menu[Y-12,2];
+ DernierePos := Y-12;
+ TextColor(15);
+ TextBackGround(0);
+End;
+{---------------------------------------------------------------------}
+Procedure Error1;
+Begin;
+ Writeln;
+ Writeln;
+ Writeln(' þ R‚pertoire Et/Ou Fichier Non Valide ');
+ Halt(2);
+End;
+
+Procedure Error2;
+Begin;
+ Writeln;
+ Writeln;
+ Writeln(' þ R‚pertoire Non Valide ');
+ Halt(2);
+End;
+{---------------------------------------------------------------------}
+Procedure Error;
+Begin;
+ TextColor(15);
+ TextBackGround(0);
+ Writeln;
+ Writeln;
+ Writeln;
+{$IFDEF ENGLISH}
+ Writeln(' BSFMGR For (C)BSFMAIL By Frederic Ribau - 1995');
+ Writeln;
+
+ If ConfigPathName = '' Then
+  Begin;
+   Writeln(' þ BSFMAIL Environment Not Setting ...');
+   If Not FileExists('BSFMAIL.CFG') Then
+   Writeln(' þConfig Name Not Present !');
+  End;
+{$ELSE}
+ Writeln(' BSFMGR Pour (C)BSFMAIL Par Frederic Ribau - 1995');
+ Writeln;
+ If ConfigPathName = '' Then
+  Begin;
+   Writeln(' þ Environnement BSFMAIL Non D‚finie ...');
+   If Not FileExists('BSFMAIL.CFG') Then
+   Writeln(' þ Fichier De Configuration Absent !');
+  End;
+{$ENDIF}
+ Writeln;
+ Write(^g);
+{  Delay(1500); }
+End;
+{---------------------------------------------------------------------}
+Function Passe : Boolean;
+Begin;
+ If Not _ConfigOk Then
+  Begin;
+   CurSorOff;
+   Passe := False;
+   GotoXY(3, Hi(WindMax)-3);
+  {$IFDEF ENGLISH}
+   Write(' þþþ Not Enought Parameters To Run This Function þþþ');
+  {$ELSE}
+   Write(' þþþ Pas Assez De Parametres Pour Acceder A Cette Fonction þþþ');
+  {$ENDIF}
+   Delay(1500);
+  End;
+ If _ConfigOk Then If Not FileExists(ConfigPathName) Then
+  Begin;
+   CurSorOff;
+   Passe := False;
+   GotoXY(3, Hi(WindMax)-3);
+  {$IFDEF ENGLISH}
+   Write(' þþþ Not Enought Parameters To Run This Function þþþ');
+  {$ELSE}
+   Write(' þþþ Pas Assez De Parametres Pour Acceder A Cette Fonction þþþ');
+  {$ENDIF}
+   Delay(1500);
+  End
+ Else Passe := True;
+End;
+{---------------------------------------------------------------------}
+Procedure NonDisponible;
+Begin;
+ GotoXY(23, Hi(WindMax)-1);
+ TextColor(11);
+ TextBackGround(1);
+ Writeln(' FONCTION NON ENCORE DISPONIBLE ');
+ TextBackGround(0);
+ Delay(1500);
+End;
+{---------------------------------------------------------------------}
+{$IFDEF UNREGISTERED}
+Procedure NonEnregistree;
+Begin;
+ GotoXY(24, Hi(WindMax)-1);
+ TextColor(11);
+ TextBackGround(1);
+ Writeln(' VERSION ENREGISTREE SEULEMENT ');
+ TextBackGround(0);
+ Delay(1500);
+End;
+{$ENDIF}
+{---------------------------------------------------------------------}
+{---------------------------------------------------------------------}
+{---------------------------------------------------------------------}
+{$F+}
+Procedure ExitBSFMGR;
+Begin;
+ IF ErrorAddr <> Nil Then CheckRTError(Config.BSFMailDir, 1);
+End;
+{$F-}
+{---------------------------------------------------------------------}
+{---------------------------------------------------------------------}
+{---------------------------------------------------------------------}
+Begin;
+
+ Exitproc     := @ExitBSFMGR;
+
+ ClrScr;
+ ConfigPathName := '';
+
+{ Recherche commande environnement BSFMAIL}
+ Swapvectors;
+  ConfigPathName := GetEnv('BSFMAIL');
+ Swapvectors;
+
+{Si Commande non trouv‚}
+ If ConfigPathName = '' Then Begin;
+                              _ConfigOk := False;
+                              Error;
+                             End;
+
+  CursorOff;
+{ TextFadeOut(5); }
+  If FileExists(ConfigPathName) Then LoadConfiguration(Config);
+  ClrScr;
+  Logo;
+  CadreMenu;
+  TextFadeIn(5);
+  Repeat
+   Position := Pop;
+   CursorOn;
+   If Position = 'CFGS' Then DoorConfig;
+   If Position = 'USER' Then UserEditor;
+   If Position = 'CONF' Then ConferenceEditor;
+   If Position = 'EXIM' Then ConfigImportExport;
+   If Position = 'PROT' Then ProtocolEditor;
+   If Position = 'COMP' Then CompressEditor;
+   If Position = 'SIZE' Then NonDisponible;
+   If Position = 'STAT' Then Statistiques;
+  {$IFDEF UNREGISTERED}
+   If Position = 'HELP' Then NonEnregistree;
+  {$ELSE}
+   If Position = 'HELP' Then ConfigurationAide;
+  {$ENDIF}
+   TextBackGround(0);
+   Window(1,1,80,25);
+   ClrScr;
+   Window(1,1,80,50);
+   ClrSCr;
+   CursorOff;
+   Logo;
+   CadreMenu;
+
+  Until Position = 'ENDS';
+  GotoXY(1,13+MaxMenu);
+  CursorOn;
+End.

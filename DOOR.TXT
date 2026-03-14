@@ -1,0 +1,52 @@
+COM2:                            {Port Comm Open}
+14400                            {Connect Speed}
+8                                {Parity ?}
+2                                {Node Number}
+38400                            {Port Comm Open At}
+Y
+N
+N
+Y
+Nicolas Fournil                  {User Name}
+Perpignan (bompas)               {User City}
+68634388                         {User Phone Number - 1}
+68634388                         {User Phone Number - 2}
+1234                             {User Passwork}
+15                               {User Security}
+38                               {Total Times On}
+02-03-95                         {Last Call}
+1800
+30
+GR                               {GR : ANSI,}
+24                               {Page Length}
+N
+1,2,3,4,5,6,7,8,9,10,11,1        {Conferences Selected}
+1
+00-00-81
+416                              {SF RecUser}
+N
+7                                {Number Of File Uploaded}
+58                               {Number Of File Downloaded}
+0
+1000
+02-21-76                         {User Birth Date}
+B:\SF\WORK\                      {Work Directory}
+C:\SF\                           {SF Node Directorie}
+Fred                             {SysOp 1st Name}
+
+
+Y
+N
+Y
+7
+0
+01-31-95
+16:45
+16:44
+10
+0
+121                              {Number Of Ko Uploaded}
+1430                             {Number Of Ko Downloade}
+
+
+7

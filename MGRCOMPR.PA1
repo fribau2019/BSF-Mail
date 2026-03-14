@@ -1,0 +1,201 @@
+UNIT MGRCompr;
+
+{$I LANGAGE.DIR}
+
+Interface
+
+ Procedure CompressEditor;
+
+
+Implementation
+
+Uses CRT,
+     BSFUtils,
+     MGRVaria;
+
+Var Modif : Boolean;
+
+{-------------------------------------------------------------------------}
+Procedure LectureCFG;
+{$I E:\SOURCE~1\PASCAL\NETMAIL\CONFIG.PAS}
+{-------------------------------------------------------------------------}
+Procedure CompressEditor;
+
+ Var
+      Fin       : Boolean;
+      C         : Char;
+      Rec   : Integer;
+      Ligne : String[80];
+      Comp    : Array[0..9] Of ConfigurationCompresssion;
+      Compr   : ConfigurationCompresssion;
+      Compress: File Of ConfigurationCompresssion;
+
+
+Begin;
+
+{Lecture NETCOMP.DAT [Fichier Texte]}
+ LectureCFG;
+ Modif := False;
+ Assign(Compress, Config.BSFMailDir+'BSFCOMP.DAT');
+ {$I-} Reset(Compress); {$I+}
+ If Ioresult <> 0 Then
+  Begin;
+   Rewrite(Compress);
+   For Rec := 0 To 9 Do
+    Begin;
+     Compr.Lettre := ' ';
+     FillChar(Compr.Name       , 21 , ' ');
+     FillChar(Compr.Compress   , 61 , ' ');
+     FillChar(Compr.Decompress , 61 , ' ');
+     Comp[Rec].Lettre     := Compr.Lettre;
+     Comp[Rec].Name       := Compr.Name;
+     Comp[Rec].Compress   := Compr.Compress;
+     Comp[Rec].Decompress := Compr.Decompress;
+     Seek(Compress, Rec);
+     Write(Compress, Compr);
+    End;
+  End
+ Else
+  Begin;
+   For Rec := 0 To FileSize(Compress)-1 Do
+    Begin;
+     Seek(Compress, Rec);
+     Read(Compress, Compr);
+     Comp[Rec].Lettre     := Compr.Lettre;
+     Comp[Rec].Name       := Compr.Name;
+     Comp[Rec].Compress   := Compr.Compress;
+     Comp[Rec].Decompress := Compr.Decompress;
+    End;
+  End;
+ Close(Compress);
+
+
+Rec := 0;
+Repeat
+ ClrScr;
+{$IFDEF ENGLISH}
+ TextColor(14); GotoXY(24,1); Writeln('CONFIGURATION EXTERNAL COMPRESSION');
+ TextColor(3); GotoXY(2,3);
+ Writeln('Compression #',Rec+1,' of 10');
+ TextColor(15);
+ GotoXY(2,8); Writeln('A..Compression Letter : ', Comp[Rec].Lettre);
+ GotoXY(2,10); Writeln('B..Compression Format : ', Comp[Rec].Name);
+ GotoXY(2,13); Writeln('C..Compression      : ', Comp[Rec].Decompress);
+ GotoXY(2,15); Writeln('D..Decompression    : ', Comp[Rec].Compress);
+ GotoXY(1,22); Write('Your Choise [A-D], <+>, <->, Q To Quit :');
+{$ELSE}
+ TextColor(14); GotoXY(28,1); Writeln('MODE DE COMPRESION EXTERNE');
+ TextColor(3); GotoXY(2,3);
+ Writeln('Compression #',Rec+1,' Sur 10');
+ TextColor(15);
+ GotoXY(2,08); Writeln('A..Lettre Du Compacteur  : ', Comp[Rec].Lettre);
+ GotoXY(2,10); Writeln('B..Format De Compression : ', Comp[Rec].Name);
+ GotoXY(2,13); Writeln('C..Compression      : ', Comp[Rec].Decompress);
+ GotoXY(2,15); Writeln('D..D‚compression    : ', Comp[Rec].Compress);
+ GotoXY(1,22); Write('Votre Choix [A-D], <+>, <->, Q Pour Quitter : ');
+{$ENDIF}
+ Repeat
+  C := upcase(readKey);
+ Until C in ['A','B','C','D','+','-','Q',#27];
+
+  Case C Of
+   'A' :
+         Begin;
+         {$IFDEF ENGLISH}
+          GotoXY(3,24); Write('Compression Letter : ');
+         {$ELSE}
+          GotoXY(3,24);Write('Lettre Du Compacteur : ');
+         {$ENDIF}
+          Comp[Rec].Lettre := Upcase(ReadKey);
+          Comp[Rec].Lettre := MAJ(Comp[Rec].Lettre);
+          Modif := True;
+         End;
+   'B' :
+         Begin;
+         {$IFDEF ENGLISH}
+          GotoXY(3,24); Write('Compression Format : ');
+         {$ELSE}
+          GotoXY(3,24); Write('Format De Compression : ');
+         {$ENDIF}
+          Readln(Comp[Rec].Name);
+          Comp[Rec].Name := MAJ(Comp[Rec].Name);
+          Modif := True;
+         End;
+   'C' :
+         Begin;
+         {$IFDEF ENGLISH}
+          GotoXY(3,24); Write('Compresssion : ');
+         {$ELSE}
+          GotoXY(3,24); Write('Compresssion : ');
+         {$ENDIF}
+          Readln(Comp[Rec].Decompress);
+          Modif := True;
+         End;
+   'D' :
+         Begin;
+         {$IFDEF ENGLISH}
+          GotoXY(3,24); Write('D‚Compression : ');
+         {$ELSE}
+          GotoXY(3,24); Write('D‚Compression : ');
+         {$ENDIF}
+          Readln(Comp[Rec].Compress);
+          Modif := True;
+         End;
+   '+' :
+         Begin;
+           Inc(Rec);
+           If Rec > 9 Then Rec := 9;
+         End;
+   '-' :
+         Begin;
+           Dec(Rec);
+           If Rec < 0 Then Rec := 0;
+         End;
+   'Q' : Fin := true;
+   #27 : Fin := true;
+
+  End;
+
+Until Fin = True;
+
+ If Modif Then
+  Begin;
+   TextColor(14);
+   GotoXY(2,24);
+  {$IFDEF ENGLISH}
+   Write(' SAVE (Y/n) : ');
+  {$ELSE}
+   Write(' SAUVER (O/n) : ');
+  {$ENDIF}
+   Repeat
+    C := Upcase(ReadKey);
+   Until C in ['Y','N','O',#13,#27];
+
+   Case C of
+    'O',
+    #13,
+    'Y' : Begin;
+           Assign(Compress,Config.BSFMailDir+'BSFComp.DAT');
+           {$I-} Reset(Compress); {$I+}
+           Rewrite(Compress);
+           For Rec := 0 To 9 Do
+            Begin;
+             Compr.Lettre     := Comp[Rec].Lettre;
+             Compr.Name       := Comp[Rec].Name;
+             Compr.Compress   := Comp[Rec].Compress;
+             Compr.Decompress := Comp[Rec].Decompress;
+             Seek(Compress, Rec);
+             Write(Compress, Compr);
+            End;
+           {$I-} Close(Compress); {$I+}
+          End;
+    #27,
+    'N' :;
+   End;
+  End;
+Fin := False;
+End;
+{-------------------------------------------------------------------------}
+
+
+END.

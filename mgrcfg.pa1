@@ -1,0 +1,509 @@
+UNIT MGRCfg;
+
+{$I E:\SOURCE~1\PASCAL\NETMAIL\LANGAGE.DIR}
+
+Interface
+
+ Procedure DoorConfig;
+
+Implementation
+
+Uses Dos,
+     Crt,
+     BSFUtils,
+     MGRMenu,
+     MGRVaria;
+
+TYPE TT = REcord
+           X, Y : Byte;
+          End;
+
+VAR MENU : ARRAY [1..24] Of String;
+    DirInfo: SearchRec;
+    Posis : Byte;
+    Max : Shortint;
+    X   : Integer;
+    Y 	: Integer;
+    C       : Char;
+    Reponse : String[40];
+    I       : Longint;
+    Code    : Integer;
+    Cfg     : Text;
+    Fin     : Boolean;
+    Modif   : Boolean;
+
+{-------------------------------------------------------------------------}
+Procedure LectureCFG(Name : String);
+Begin;
+{Lecture NETMAIL.CFG [Fichier Texte]}
+ Assign(CFG, Name);
+ {$I-} Reset(CFG); {$I+}
+ If IoResult <> 0 Then Rewrite(CFG)
+    Else
+     Begin;
+      ReadLn(CFG, Config.BSFMailDir);
+      ReadLn(CFG, Config.BBSName);
+      ReadLn(CFG, Config.BBSID);
+      ReadLn(CFG, Config.BBSCity);
+      ReadLn(CFG, Config.BBSPhone);
+      ReadLn(CFG, Config.LocalQWK);
+      ReadLn(CFG, Config.WelcomeDir);
+      ReadLn(CFG, Config.NewsDir);
+      ReadLn(CFG, Config.GoodByeDir);
+      ReadLn(CFG, C);
+       If C = 'Y' Then Config.AddFiles := True Else Config.AddFiles := False;
+      ReadLn(CFG, C);
+       If C = 'Y' Then Config.Goodbye := True Else Config.Goodbye := False;
+      Readln(CFG, Config.PathLog);
+      Readln(CFG, Config.SFDIR);
+      Readln(CFG, Config.PrescanDir);
+     End;
+ Close(CFG);
+End;
+{-------------------------------------------------------------------------}
+Procedure EcritureCFG(Name : String);
+Begin;
+  Assign(CFG, Name);
+  {$I-} Reset(CFG); {$I+}
+  If Ioresult <> 0 Then ReWrite(CFG);
+  Rewrite(CFG);
+  WriteLn(CFG, Config.BSFMailDir);
+  WriteLn(CFG, Config.BBSName);
+  WriteLn(CFG, Config.BBSID);
+  WriteLn(CFG, Config.BBSCity);
+  WriteLn(CFG, Config.BBSPhone);
+  WriteLn(CFG, Config.LocalQWK);
+  WriteLn(CFG, Config.WelcomeDir);
+  WriteLn(CFG, Config.NewsDir);
+  WriteLn(CFG, Config.GoodByeDir);
+  If Config.AddFiles    = True Then Writeln(CFG,'Y') Else Writeln(CFG, 'N');
+  If Config.Goodbye     = True Then Writeln(CFG,'Y') Else Writeln(CFG, 'N');
+  Writeln(CFG, Config.PathLog);
+  Writeln(CFG, Config.SfDir);
+  Writeln(CFG, Config.PrescanDir);
+  Close(CFG);
+End;
+{-------------------------------------------------------------------------}
+Procedure DoorConfigue(Name : String);
+Begin;
+
+ LecTureCFG(Name);
+
+Repeat
+ Affichage(Name);
+ TextColor(15);
+ GotoXY(1,24);
+{$IFDEF ENGLISH}
+ Write(' Your Choise [A-N], Q To Quit : ');
+{$ELSE}
+ Write(' Votre Choix [A-N], Q: Quitter: ');
+{$ENDIF}
+ Fin := False;
+
+ Repeat
+  GotoXY(33,24);
+  Write(' ');
+  GotoXY(33,24);
+  C := Upcase(ReadKey);
+  Write(C);
+ Until C In ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','Q', #27];
+
+ GotoXY(1,24); ClrEol;
+
+ Case C Of
+
+           'A' :
+                 Begin;
+                    GotoXY(3,24); Write(ChoixCFG[C]);
+                    Reponse := Config.BBSName;
+                    TextColor(11);
+                    Reponse := GetString(30, Reponse, '±');
+                    If Reponse <> '' Then Config.BBSName := Reponse;
+                    Modif := True;
+                    TextColor(15);
+                 End;
+           'B' :
+                 Begin;
+                    GotoXY(3,24); Write(ChoixCFG[C]);
+                    Reponse := Config.BBSID;
+                    TextColor(11);
+                    Reponse := GetString(8, Reponse, '±');
+                    If Reponse <> '' Then Config.BBSID := MAJ(Reponse);
+                    Modif := True;
+                    TextColor(15);
+                 End;
+           'C' :
+                 Begin;
+                    GotoXY(3,24); Write(ChoixCFG[C]);
+                    Reponse := Config.BBSCity;
+                    TextColor(11);
+                    Reponse := GetString(30, Reponse, '±');
+                    If Reponse <> '' Then Config.BBSCity := Reponse;
+                    Modif := True;
+                    TextColor(15);
+                 End;
+           'D' :
+                 Begin;
+                    GotoXY(3,24); Write(ChoixCFG[C]);
+                    Reponse := Config.BBSPhone;
+                    TextColor(11);
+                    Reponse := GetString(30, Reponse, '±');
+                    If Reponse <> '' Then Config.BBSPhone := Reponse;
+                    Modif := True;
+                    TextColor(15);
+                 End;
+           'E' :
+                 Begin;
+                    GotoXY(3,24); Write(ChoixCFG[C]);
+                    Reponse := Config.SFDIR;
+                    TextColor(11);
+                    Reponse := GetString(60, Reponse, '±');
+                    If Reponse <> '' Then Reponse := MAJ(Reponse);
+                    If Copy(Reponse,Length(Reponse),1) = '\' Then Else Reponse := Reponse + '\';
+                    If CheckDir(Reponse) Then Config.SFDIR := Reponse;
+                    Modif := True;
+                    TextColor(15);
+                 End;
+           'F' :
+                 Begin;
+                    GotoXY(3,24); Write(ChoixCFG[C]);
+                    Reponse := Config.BsfMailDIR;
+                    TextColor(11);
+                    Reponse := GetString(60, Reponse, '±');
+                    If Reponse <> '' Then Reponse := MAJ(Reponse);
+                    If Copy(Reponse,Length(Reponse),1) = '\' Then Else Reponse := Reponse+'\';
+                    If CheckDir(Reponse) Then Config.BSFMailDir := Reponse;
+                    Modif := True;
+                    TextColor(15);
+                 End;
+           'G' :
+                 Begin;
+                    GotoXY(3,24); Write(ChoixCFG[C]);
+                    Reponse := Config.LocalQWK;
+                    TextColor(11);
+                    Reponse := GetString(60, Reponse, '±');
+                    If Reponse <> '' Then Reponse := MAJ(Reponse);
+                    If Copy(Reponse,Length(Reponse),1) = '\' Then Else Reponse := Reponse+'\';
+                    If CheckDir(Reponse) Then Config.LocalQWK := Reponse;
+                    Modif := True;
+                    TextColor(15);
+                 End;
+
+           'H' :
+                 Begin;
+                    GotoXY(3,24); Write(ChoixCFG[C]);
+                    Reponse := Config.PrescanDir;
+                    TextColor(11);
+                    Reponse := GetString(60, Reponse, '±');
+                    If Reponse <> '' Then Reponse := MAJ(Reponse);
+                    If Copy(Reponse,Length(Reponse),1) = '\' Then Else Reponse := Reponse+'\';
+                    If CheckDir(Reponse) Then Config.PrescanDir := Reponse;
+                    Modif := True;
+                    TextColor(15);
+                 End;
+
+           'I' :
+                 Begin;
+                    GotoXY(1,24); Write(ChoixCFG[C]);
+                    Reponse := Config.WelcomeDir;
+                    TextColor(11);
+                    Reponse := GetString(60, Reponse, '±');
+                    If Reponse <> '' Then
+                    If FileExists(Reponse) Then Config.WelcomeDir := MAJ(Reponse);
+                    Modif := True;
+                    TextColor(15);
+                 End;
+           'J' :
+                 Begin;
+                    GotoXY(3,24); Write(ChoixCFG[C]);
+                    Reponse := Config.NewsDir;
+                    TextColor(11);
+                    Reponse := GetString(60, Reponse, '±');
+                    If Reponse <> '' Then
+                    If FileExists(Reponse) Then Config.NewsDir := MAJ(Reponse);
+                    Modif := True;
+                    TextColor(15);
+                 End;
+           'K' :
+                 Begin;
+                    GotoXY(3,24); Write(ChoixCFG[C]);
+                    Reponse := Config.GoodbyeDir;
+                    TextColor(11);
+                    Reponse := GetString(60, Reponse, '±');
+                    If Reponse <> '' Then
+                    If FileExists(Reponse) Then Config.GoodByeDir := MAJ(Reponse);
+                    Modif := True;
+                    TextColor(15);
+                 End;
+           'L' :
+                 Begin;
+                    GotoXY(3,24); Write(ChoixCFG[C]);
+                    Reponse := Config.PathLog;
+                    TextColor(11);
+                    Reponse := GetString(60, Reponse, '±');
+                    If Reponse <> '' Then Config.PathLog := MAJ(Reponse);
+                    Modif := True;
+                    TextColor(15);
+                 End;
+
+           'M' : Begin;
+                  Config.AddFiles := NOT Config.AddFiles;
+                  Modif := True;
+                 End;
+
+           'N' : Begin;
+                  Config.Goodbye := NOT Config.Goodbye;
+                  Modif := True;
+                 End;
+
+           'Q' : Fin := True;
+           #27 : Fin := True;
+
+ End;
+
+Until Fin = True;
+ TextColor(14);
+
+ If Modif = True Then
+  Begin;
+   GotoXY(2,24);
+  {$IFDEF ENGLISH}
+   Write(' SAVE (Y/N) : ');
+  {$ELSE}
+   Write(' SAUVER (O/N) : ');
+  {$ENDIF}
+   Repeat
+    C := Upcase(ReadKey);
+   Until C in ['Y','N','O',#27];
+
+   Case C of
+    'O',
+    'Y' : Begin;
+           EcritureCFG(Name);
+          End;
+    #27,
+    'N' :;
+   End;
+  End;
+Fin := False;
+End;
+{-------------------------------------------------------------------------}
+Procedure Cadre(Max : Byte);
+Begin;
+ TextColor(15);
+ TextBackGround(0);
+ ClrScr;
+ TextColor(14);
+
+{$IFDEF ENGLISH}
+ GotoXY(23,1);
+ Writeln('þþþ CONFIGURATION EDITOR þþþ');
+{$ELSE}
+ GotoXY(21,1);
+ Writeln('þþþ EDITEUR DE CONFIGURATION þþþ');
+{$ENDIF}
+ TextColor(11);
+ TextBackGround(0);
+ GotoXY(27,05);
+ Write('ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿');
+ For Posis := 1 To Max+1 Do
+  Begin;
+   GotoXY(27,05+Posis);
+   Write('³                 ³');
+   GotoXY(31,05+Posis);
+   TextColor(11);
+   Write(Menu[Posis]);
+   TextColor(15);
+  End;
+ GotoXY(27,05+Posis);
+ Write('ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ');
+
+ TextColor(11);
+ GotoXY(1,Hi(WindMax)-3);
+ Writeln('  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿  ÚÄÄÄÄÄÄ¿');
+{$IFDEF ENGLISH}
+ Writeln('  ³ Edit Config File ³  ³ Create New Config ³  ³ Delete Config ³  ³ Quit ³');
+{$ELSE}
+ Writeln('  ³   Editer un CFG  ³  ³ Cr‚er Nouveau CFG ³  ³  Effacer CFG  ³  ³ Quit ³');
+{$ENDIF}
+ Writeln('  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ  ÀÄÄÄÄÄÄÙ');
+
+End;
+{-------------------------------------------------------------------------}
+Procedure Pop(MAX : Byte);
+
+Var
+    C 	: Char;
+    Fin : Boolean;
+    Chaine : String;
+
+Begin;
+ Y := 6;
+ X := 4;
+ Fin := False;
+ Repeat
+  TextBackGround(3);
+  TextColor(11);
+  GotoXY(28,Y);
+  Write('   ',Menu[Y-05],Copy('                   ',1,14-Length(Menu[Y-05])));
+
+  GotoXY(X, Hi(WindMax)-2);
+ {$IFDEF ENGLISH}
+  If X = 04 Then Writeln(' Edit Config File ');
+  If X = 26 Then Writeln(' Create New Config ');
+  If X = 49 Then Writeln(' Delete Config ');
+  If X = 68 Then Writeln(' Quit ');
+ {$ELSE}
+  If X = 04 Then Writeln('   Editer un CFG  ');
+  If X = 26 Then Writeln(' Cr‚er Nouveau CFG ');
+  If X = 49 Then Writeln('  Effacer CFG  ');
+  If X = 68 Then Writeln(' Quit ');
+ {$ENDIF}
+
+   C := Upcase(Readkey);
+
+
+   If C = #77 Then Begin;
+			  TextBackGround(0);
+			  TextColor(11);
+                          GotoXY(X, Hi(WindMax)-2);
+                         {$IFDEF ENGLISH}
+                          If X = 04 Then Writeln(' Edit Config File ');
+                          If X = 26 Then Writeln(' Create New Config ');
+                          If X = 49 Then Writeln(' Delete Config ');
+                          If X = 68 Then Writeln(' Quit ');
+                         {$ELSE}
+                          If X = 04 Then Writeln('   Editer un CFG  ');
+                          If X = 26 Then Writeln(' Cr‚er Nouveau CFG ');
+                          If X = 49 Then Writeln('  Effacer CFG  ');
+                          If X = 68 Then Writeln(' Quit ');
+                         {$ENDIF}
+                          Inc(X);
+                   End;
+
+   If C = #75 Then Begin;
+			  TextBackGround(0);
+			  TextColor(11);
+                          GotoXY(X, Hi(WindMax)-2);
+                         {$IFDEF ENGLISH}
+                          If X = 04 Then Writeln(' Edit Config File ');
+                          If X = 26 Then Writeln(' Create New Config ');
+                          If X = 49 Then Writeln(' Delete Config ');
+                          If X = 68 Then Writeln(' Quit ');
+                         {$ELSE}
+                          If X = 04 Then Writeln('   Editer un CFG  ');
+                          If X = 26 Then Writeln(' Cr‚er Nouveau CFG ');
+                          If X = 49 Then Writeln('  Effacer CFG  ');
+                          If X = 68 Then Writeln(' Quit ');
+                         {$ENDIF}
+                          Dec(X);
+                   End;
+
+
+   If C = #80 Then Begin;
+			  TextBackGround(0);
+			  TextColor(11);
+			  GotoXY(28,Y);Write('   ',Menu[Y-05],Copy('                   ',1,14-Length(Menu[Y-05])));
+			  Inc(Y);
+		   End;
+   If C = #72 Then Begin;
+			  TextBackGround(0);
+			  TextColor(11);
+			  GotoXY(28,Y);Write('   ',Menu[Y-05],Copy('                   ',1,14-Length(Menu[Y-05])));
+			  Dec(Y);
+		   End;
+   If C = #13 Then Begin;
+   	            TextBackGround(0);
+		    TextColor(11);
+		    GotoXY(28,Y);Write('   ',Menu[Y-05],Copy('                   ',1,14-Length(Menu[Y-05])));
+                    Fin := True;
+                   End;
+
+   If C = #27 Then Begin;
+                    Y := 05+Max;
+                    X := 0;
+                    Fin := True;
+                   End;
+
+ If Y = 05 Then Y := 05+MAX;
+ If Y = 06+MAX Then Y := 06;
+
+ If X = 05 Then X := 26; If X = 27 Then X := 49;
+ If X = 50 Then X := 68; If X = 69 Then X := 04;
+ If X = 03 Then X := 68; If X = 25 Then X := 04;
+ If X = 48 Then X := 26; If X = 67 Then X := 49;
+
+ Until Fin = True;
+ TextColor(15);
+ TextBackGround(0);
+ Y := Y - 5;
+ If X = 04 Then X := 1;
+ If X = 26 Then X := 2;
+ If X = 49 Then X := 3;
+ If X = 68 Then X := 0;
+
+End;
+{-------------------------------------------------------------------------}
+Procedure DoorConfig;
+Begin;
+ Repeat
+  Modif := False;
+  CursorOff;
+  FindFirst('*.CFG', Archive, DirInfo);
+  Posis := 1;
+  While DosError = 0 do
+  begin
+    Menu[Posis] := DirInfo.Name;
+    FindNext(DirInfo);
+    Inc(Posis);
+  End;
+  Max := Posis-1;
+  Cadre(MAX);
+  If Max > 0 Then Pop(Max);
+
+  cursoron;
+  If X = 1 Then DoorConfigue(Menu[Y]);
+
+  If ( (X = 2) Or (Max = 0)) Then
+   Begin;
+    GotoXY(10, Hi(WindMax)-10);
+    Menu[Max+1] := '';
+   {$IFDEF ENGLISH}
+    Write('Please Enter Config Name (.CFG) : ');
+   {$ELSE}
+    Write('Veuillez Entrer Un Nom De Config (.CFG) : ');
+   {$ENDIF}
+    ReadLn(Menu[Max+1]);
+    If Pos('.CFG', MAJ(Menu[Max+1])) > 0 Then Menu[Max+1] := Copy(Menu[Max+1], 1, Pos('.', Menu[Max+1])-1);
+    If Length(Menu[Max+1]) > 8 Then Menu[Max+1] := Copy(Menu[Max+1], 1, 8);
+    If Menu[Max+1] <> '' Then Menu[Max+1] := MAJ(Menu[Max+1]) + '.CFG';
+    If Menu[Max+1] <> '' Then DoorConfigue(Menu[Max+1]);
+   End;
+
+  If X = 3 Then
+   Begin;
+    GotoXY(13,Hi(WindMax)-7);
+   {$IFDEF ENGLISH}
+    Write('Delete '+Menu[Y]+' (Y/N) ? ');
+   {$ELSE}
+    Write('Effacer '+Menu[Y]+' (O/N) ? ');
+   {$ENDIF}
+    Repeat
+     C := Upcase(ReadKey);
+    Until C in ['Y','N','O',#27];
+
+    Case C Of
+     'O',
+     'Y' : Begin;
+            Assign(CFG, Menu[Y]);
+            Erase(CFG);
+           End;
+     #27,
+     'N' :;
+    End;
+   End;
+
+ Until X = 0;
+End;
+{-------------------------------------------------------------------------}
+END.

@@ -1,0 +1,36 @@
+      Users    = Record
+                   Name           : String[40];       {Nom Du USER}
+                   Protocol       : Byte;             {Protocol De Transfert [0-9]}
+                   Compression    : Byte;             {Mode De Compression [0-9]}
+                   Welcome        : Boolean;          {Page Presentation ?}
+                   Bulletin       : Boolean;          {Page Bulletins ?}
+                   UploadFiles    : Boolean;          {Autorise Up Fichiers ?}
+                   DownloadFiles  : Boolean;          {Autorise Dn Fichiers ?}
+                   Prescan        : Boolean;          {Prescan ?}
+                   UseCurentDate  : Boolean;          {Utiliser La Date Courante ?}
+                   News           : Boolean;          {Page News ?}
+                   SmallControl   : Boolean;          {Petit CONTROL.DAT ?}
+                   SendUserInf    : Boolean;          {Envoyer User Info ?}
+                   NDXFiles       : Boolean;          {Envoyer Fichier NDX ?}
+                   RepeatScan     : Boolean;          {Repete Dl Scan pour Prescan ?}
+                   Goodbye        : Boolean;          {Page De Fin ?}
+                   AllowFileUpld  : Boolean;          {Autorise Up Dans Fichier}
+                   AllowFileDown  : Boolean;          {Autorise Dl Dans Fichier}
+                   XPertMode      : Boolean;          {Mode Expert}
+                   Conf           : Conference;       {Conferences Choisies}
+                   NbPageSysOp    : Integer;          {Nombre De Page SysOp}
+                   NbMessDown     : LongInt;          {Nombre De Mails Dl}
+                   NbMessUpld     : LongInt;          {Nombre De Mails Up}
+                   NbConnection   : Longint;          {Nombre De Connection}
+                   LastQWKDate    : String[8];        {Dernier QWK}
+                   LastQWKTime    : String[5];        {Dernier QWK}
+                   NewFiles       : Boolean;          {Scan News Files}
+                   SfNumero       : Word;             {SF Enregistrement [0..inf]}
+                   Extra1         : Array[0..1] Of Byte;
+                   NetStatus      : Boolean;          {NetStatus ?}
+                   NbMailConf     : LongInt;          {Nombre De Mail Par Conf}
+                   NbMailTTle     : LongInt;          {Nombre De Mail Par Paquet}
+                   NbDownPacket   : Word;             {Nombre De Paquet Dl}
+                   NbUpldPacket   : Word;             {Nombre De Paquet Dl}
+                   Extra          : Array[0..184] Of Byte;
+       End;

@@ -1,0 +1,252 @@
+Unit BSFVerif;
+
+{$I \SOURCE~1\PASCAL\NETMAIL\LANGAGE.DIR}
+
+Interface
+
+  Procedure VerifyUsers;
+
+Implementation
+
+Uses BSFUtils,
+     CRT,
+     BSFConst;
+
+Type
+  PDataRec  = ^SFDataRec;
+  SFDataRec = Record
+               Name: String[30];
+               Next: PDataRec;
+              End;
+
+Const
+  DataRecList  : PDataRec = nil;
+  CurRec       : PDataRec = nil;
+
+VAR Log  : Text;
+{-------------------------------------------------------------------------}
+Procedure AddRec(AName: String);
+Var Temp : PDataRec;
+Begin
+  New(CurRec);
+  CurRec^.Name := AName;
+  CurRec^.Next := nil;
+  Temp         := DataRecList;
+  If Temp = NIL Then DataRecList := CurRec
+                Else
+                 Begin
+                  While Temp^.Next <> NIL Do Temp := Temp^.Next;
+                  Temp^.Next := CurRec;
+                 End;
+End;
+{-------------------------------------------------------------------------}
+Procedure PrevRec;
+Var Temp : PDataRec;
+Begin
+  Temp   := DataRecList;
+  If Temp <> CurRec Then While Temp^.Next <> CurRec Do Temp := Temp^.Next;
+  CurRec := Temp;
+End;
+{-------------------------------------------------------------------------}
+Procedure NextRec;
+Begin
+  If CurRec^.Next <> NIL Then CurRec := CurRec^.Next;
+End;
+{-------------------------------------------------------------------------}
+Function Verifie(S : String; Var SFRec : Word) : Boolean;
+var Temp  : PDataRec;
+    Pl    : Word;
+    Ok    : Boolean;
+begin
+  S       := MAJ(S);
+  Temp    := DataRecList;
+  Pl      := 0;
+  Ok      := False;
+  while Temp <> nil do
+   begin
+    If MAJ(Temp^.Name) = S Then Begin;
+                                 Ok    := True;
+                                 SFRec := Pl;
+                                End;
+     Inc(Pl);
+     Temp := Temp^.Next;
+   end;
+  Verifie := Ok;
+End;
+{-------------------------------------------------------------------------}
+Procedure RefaisBSFUSERS(BRec : Word);
+Var NewNetUser : File Of Users;
+    I          : Word;
+    F          : File;
+Begin;
+
+ GotoXY(1,17); ClrEol;
+ GotoXY(1,17);
+ {$IFDEF ENGLISH}
+  Write('þ Message : Deleting '+User.Name+'.');
+ {$ELSE}
+  Write('þ Message : Effacement De '+User.Name+'.');
+ {$ENDIF}
+
+
+ Assign(NewNetUser, Config.BSFMailDir+'BSFUSERS.$$$');
+ {$I-} Reset(NewNetUser); {$I+}
+ If IoResult <> 0 Then;
+ ReWrite(NewNetUser);
+ For I := 0 To FileSize(USR)-1 Do
+  Begin;
+   Seek(USR, I);
+   Read(USR, User);
+   If I <> BRec Then Write(NewNetUser, User);
+  End;
+ Close(NewNetUser);
+ Close(USR);
+
+ Erase(USR);
+
+ Assign(F, Config.BSFMailDir+'BSFUSERS.$$$');
+ Reset(F);
+ Close(F);
+ Rename(F, Config.BSFMailDir+'BSFUSERS.DAT');
+
+ Assign(USR, Config.BsfMailDir+'BSFUSERS.DAT');
+ Reset(USR);
+
+End;
+{-------------------------------------------------------------------------}
+Procedure VerifyUsers;
+
+Var SFRec    : Word;
+    SFCALL   : File Of UsersSF;
+    SF       : UsersSF;
+    BRec     : Word;
+    Trouve   : Boolean;
+    Pourcent : Real;
+    NbChange,
+    NbNonTrou,
+    NbTrouve : Word;
+
+Begin;
+
+   CurSorOff;
+   ClrScr;
+   TextColor(11);
+   TextBackGround(0);
+   GotoXY(13,1);
+  {$IFDEF ENGLISH}
+   Write('BSFMAIL For (C)Spitfire By Fr‚d‚ric Ribau - 1994/1995');
+  {$ELSE}
+   Write('BSFMAIL Pour (C)Spitfire Par Fr‚d‚ric Ribau - 1994/1995');
+  {$ENDIF}
+
+   TextBackGround(1);
+  {$IFDEF ENGLISH}
+   GotoXY(23,3);
+   Write(' þ VERIFING USERS þ ');
+  {$ELSE}
+   GotoXY(24,3);
+   Write(' þ VERIFICATION DES USERS þ ');
+  {$ENDIF}
+
+   TextColor(15);
+   TextBackGround(0);
+
+  {$IFDEF ENGLISH}
+   GotoXY(2,6); Write('þ Number Of Users :');
+   GotoXY(2,8); Write('þ Percentage Processed :');
+   GotoXY(3,11); Write('þ Find         :');
+   GotoXY(3,12); Write('þ Not Find     :');
+   GotoXY(3,13); Write('þ Modification :');
+  {$ELSE}
+   GotoXY(2,6); Write('þ Nombre De Users :');
+   GotoXY(2,8); Write('þ Pourcentage Effectu‚ :');
+   GotoXY(3,11); Write('þ Trouv‚       :');
+   GotoXY(3,12); Write('þ Non Trouv‚   :');
+   GotoXY(3,13); Write('þ Modification :');
+  {$ENDIF}
+
+   GotoXY(1,17); ClrEol;
+  {$IFDEF ENGLISH}
+   GotoXY(2,17); Write('þ Message : Loading SFUsers Database In Memory...');
+  {$ELSE}
+   GotoXY(2,17); Write('þ Message : Chargement De La Base Users De Spitfire En M‚moire...');
+  {$ENDIF}
+
+  Assign(SFCALL, Config.WorkDir+'SFUSERS.DAT');
+  {$I+} Reset(SFCALL); {$I-}
+  If IoResult <> 0 Then Write(^g);
+  SFREC := 0;
+  Repeat
+   Seek(SFCALL, SFRec);
+   Read(SFCALL, SF);
+   Reduce(SF.UserName, #32);
+   AddRec(SF.UserName);
+   Inc(SFRec);
+  Until SFREC >= FileSize(SFCALL);
+  Close(SFCALL);
+
+   GotoXY(1,17); ClrEol;
+  {$IFDEF ENGLISH}
+   GotoXY(2,17); Write('þ Message : Verifing...');
+  {$ELSE}
+   GotoXY(2,17); Write('þ Message : Verification...');
+  {$ENDIF}
+
+   Assign(USR, Config.BsfMailDir+'BSFUSERS.DAT');
+   {$I-} Reset(USR); {$I+}
+   If Ioresult <> 0 Then Halt(1);
+   If FileSize(USR) = 0 Then Halt(2);
+   BRec      := 0;
+   NbChange  := 0;
+   NbTrouve  := 0;
+   NbNonTrou := 0;
+   Repeat
+    GotoXY(22,6); Write(FileSize(USR));
+    Seek(USR, BRec);
+    Read(USR, User);
+    Reduce(User.Name, #32);
+
+    Trouve := Verifie(User.Name, SFREC);
+
+    If Trouve Then
+     If User.SFNumero <> SFRec Then
+      Begin
+       User.SFNumero := SFRec;
+       Seek(USR, Brec);
+       Write(USR, User);
+       Inc(NbChange);
+      End;
+
+    If Trouve Then Begin;
+                    Inc(NbTrouve);
+                    Inc(BRec);
+                   End
+                  Else
+                   Begin;
+                    Inc(NbNonTrou);
+                    RefaisBSFUSERS(BRec);
+                   End;
+
+
+    If FileSize(USR) > 0 Then Pourcent := BRec / FileSize(USR) * 100;
+
+    GotoXY(20, 11); Write(NbTrouve:3);
+    GotoXY(20, 12); Write(NbNonTrou:3);
+    GotoXY(20, 13); Write(NbChange:3);
+    GotoXY(27,8); Write('      ');
+    GotoXY(27,8); Write(Pourcent:3:1,' %');
+
+   Until BRec >= FileSize(USR);
+   Close(USR);
+
+   GotoXY(1,17); ClrEol;
+  {$IFDEF ENGLISH}
+   GotoXY(2,17); Write('þ Message : Finished !');
+  {$ELSE}
+   GotoXY(2,17); Write('þ Message : Fini !');
+  {$ENDIF}
+   CurSorOn;
+
+End;
+{-------------------------------------------------------------------------}
+End.

@@ -1,0 +1,421 @@
+UNIT BSFBulls;
+
+{$I D:\SOURCE~1\PASCAL\NETMAIL\LANGAGE.DIR}
+
+Interface
+ Uses Crt,
+      Dos,
+      BSFConst,
+      BSFComm,
+      BSFUtils;
+
+    Function  Bulletin(Path : String; LastDate : String; TempDir : String) : Byte;
+    Procedure Welcome(Where : String; TempDir : String);
+    Procedure News(Where : String; TempDir : String);
+    Procedure GoodBye(Where : String; TempDir : String);
+    Function  NewsFiles(SFDIR : String; Sec : Integer; Date : String; TempDir : String) : Integer;
+
+Implementation
+
+
+{---------------------------------------------------------------------------}
+function serial_day(day, month, year: integer) : longint;
+var  m, y : longint;
+   begin
+      if month > 2 then begin
+         m := month - 3;
+         y := year;
+      end
+      else begin
+         m := month + 9;
+         y := year - 1;
+      end;
+
+      serial_day :=
+         ((y div 100) * 146097) div 4 +
+         ((y mod 100) * 1461) div 4 +
+         (153 * m + 2) div 5 + day;
+   end;
+
+
+
+function day_diff(day_1, month_1, year_1, day_2, month_2, year_2: integer)
+   : longint;
+
+   begin
+   day_diff := serial_day(day_2, month_2, year_2) -
+      serial_day(day_1, month_1, year_1);
+   end;
+
+{---------------------------------------------------------------------------}
+Function Bulletin(Path : String; LastDate : String; TempDir : String) : Byte;
+
+Var Nombre : Integer;
+    Fichier1,
+    Fichier2        : File;
+    DirInfo         : SearchRec;
+    h, m, s, hund   : Word;
+    ftime           : Longint;
+    dt              : DateTime;
+    A, B      : Integer;
+    NomBullet : String[12];
+    Extens    : String[3];
+    Buffe           : array[1..2048] of Char;
+    NumRead,
+    NumWritten      : Word;
+
+
+Begin;
+  Nombre := 0;
+  FindFirst(Path+'BULLET*.CLR', Archive, DirInfo);
+  While DosError = 0 Do Begin;
+   If DirInfo.Name <> 'BULLETIN.CLR' Then
+                         Begin
+                          Assign(fichier1, Path+DirInfo.Name);
+                          {$I-} reset(fichier1); {$I+}
+                          If Ioresult = 0 Then Begin;
+                          GetFTime(fichier1,ftime);
+                          {$I-} Close(Fichier1); {$I+}
+                          If Ioresult <> 0 Then ;
+                          UnpackTime(ftime,dt);
+                          With Dt Do Begin;
+                             If POS('N/A', LastDATE) > 0 Then Begin;
+
+                                                               {Blt(Path+DirInfo.Name);}
+ A := POS('BULLET', Dirinfo.name)+6;
+ B := POS('.CLR', dirinfo.name)-A;
+
+ Extens := IntToStr(StrToInt(Copy(DirInfo.Name, A, B)));
+
+ Assign(Fichier1, Path+DirInfo.Name);
+ {$I-} Reset(Fichier1,1); {$I+};
+ If Ioresult = 0 Then Begin;
+                       Assign(Fichier2, TempDir+'\BLT-1.'+ExTens);
+                       ReWrite(Fichier2, 1);
+                        Repeat
+                         BlockRead(Fichier1, Buffe, SizeOf(Buffe), NumRead);
+                         BlockWrite(Fichier2, Buffe, NumRead, NumWritten);
+                        Until (NumRead = 0) or (NumWritten <> NumRead);
+                       Close(Fichier1);
+                       Close(Fichier2);
+                      End
+                 Else;
+
+
+
+                                                               Inc(Nombre);
+                                                              End
+                              Else
+If Day_Diff(StrToInt(Copy(LastDate,4,2)),StrToInt(Copy(LastDate,1,2)),1900+StrToInt(Copy(LastDate,7,2)),Day, Month, Year) >=0
+ Then Begin;
+{       Blt(Path+DirInfo.Name); }
+ A := POS('BULLET', Dirinfo.name)+6;
+ B := POS('.CLR', dirinfo.name)-A;
+
+ Extens := IntToStr(StrToInt(Copy(DirInfo.Name, A, B)));
+
+ Assign(Fichier1, Path+DirInfo.Name);
+ {$I-} Reset(Fichier1,1); {$I+};
+ If Ioresult = 0 Then Begin;
+                       Assign(Fichier2, TempDir+'\BLT-1.'+ExTens);
+                       ReWrite(Fichier2, 1);
+                        Repeat
+                         BlockRead(Fichier1, Buffe, SizeOf(Buffe), NumRead);
+                         BlockWrite(Fichier2, Buffe, NumRead, NumWritten);
+                        Until (NumRead = 0) or (NumWritten <> NumRead);
+                       Close(Fichier1);
+                       Close(Fichier2);
+                      End
+                 Else;
+
+
+
+       Inc(Nombre);
+      End;
+                          End;
+                         End; end;
+                        FindNext(DirInfo);
+                        End;
+
+
+ Bulletin := Nombre;
+End;
+{---------------------------------------------------------------------------}
+Procedure Welcome(Where : String; TempDir : String);
+VAR
+    Fichier1,
+    Fichier2        : File;
+    Buffe           : array[1..2048] of Char;
+    NumRead,
+    NumWritten      : Word;
+Begin;
+ Assign(Fichier1, Where);
+ {$I-} Reset(Fichier1,1); {$I+};
+ If Ioresult = 0 Then Begin;
+                       Assign(Fichier2, TempDir+'\WELCOME');
+                       ReWrite(Fichier2, 1);
+                       Repeat
+                        BlockRead(Fichier1, Buffe, SizeOf(Buffe), NumRead);
+                        BlockWrite(Fichier2, Buffe, NumRead, NumWritten);
+                       Until (NumRead = 0) or (NumWritten <> NumRead);
+                       Close(Fichier1);
+                       Close(Fichier2);
+                      End
+End;
+{---------------------------------------------------------------------------}
+Procedure News(Where : String; TempDir : String);
+VAR
+    Fichier1,
+    Fichier2        : File;
+    Buffe           : array[1..2048] of Char;
+    NumRead,
+    NumWritten      : Word;
+Begin;
+ Assign(Fichier1, Where);
+ {$I-} Reset(Fichier1,1); {$I+};
+ If Ioresult = 0 Then Begin;
+                       Assign(Fichier2, TempDir+'\NEWS');
+                       ReWrite(Fichier2, 1);
+                       Repeat
+                        BlockRead(Fichier1, Buffe, SizeOf(Buffe), NumRead);
+                        BlockWrite(Fichier2, Buffe, NumRead, NumWritten);
+                       Until (NumRead = 0) or (NumWritten <> NumRead);
+                       Close(Fichier1);
+                       Close(Fichier2);
+                      End;
+End;
+{---------------------------------------------------------------------------}
+Procedure GoodBye(Where : String; TempDir : String);
+VAR
+    Fichier1,
+    Fichier2        : File;
+    Buffe           : array[1..2048] of Char;
+    NumRead,
+    NumWritten      : Word;
+Begin;
+ Assign(Fichier1, Where);
+ {$I-} Reset(Fichier1,1); {$I+};
+ If Ioresult = 0 Then Begin;
+                       Assign(Fichier2, TempDir+'\GOODBYE');
+                       ReWrite(Fichier2, 1);
+                       Repeat
+                        BlockRead(Fichier1, Buffe, SizeOf(Buffe), NumRead);
+                        BlockWrite(Fichier2, Buffe, NumRead, NumWritten);
+                       Until (NumRead = 0) or (NumWritten <> NumRead);
+                       Close(Fichier1);
+                       Close(Fichier2);
+                      End
+
+End;
+{---------------------------------------------------------------------------}
+Function Date1 : String;
+var
+  y, m, d, dow : word;
+  aa, mm, jj : String[4];
+begin
+  GetDate(y,m,d,dow);
+  AA := IntToStr(y); If y < 10 Then AA := '0'+AA; AA := Copy(AA,3,2);
+  MM := IntToStr(m); If m < 10 Then MM := '0'+MM;
+  JJ := IntToStr(d); If d < 10 Then JJ := '0'+JJ;
+
+  Date1 := MM+'-'+JJ+'-'+AA;
+End;
+
+{---------------------------------------------------------------------------}
+Function VisuNewsFiles(Dir : String; Rec : Integer; Description : String; Date:String; TempDir : String) : Integer;
+CONST Tiret        : String = '====================================================================';
+
+Var SFFILES : Text;
+    Ligne   : String;
+    Suivante: Boolean;
+    Fichier : Boolean;
+    Nombre,
+    Day_1,
+    Month_1,
+    Year_1,
+    Day_2,
+    Month_2,
+    Year_2  : Integer;
+    NEWFILES : Text;
+
+Begin;
+ VisuNewsFiles := 0;
+ Nombre := 0;
+
+ Fichier  := False;
+ Suivante := False;
+ Month_2 := StrToInt (Copy(Date, 1, 2));
+ Day_2   := StrToInt (Copy(Date, 4, 2));
+ Year_2  := StrToInt (Copy(Date, 7, 2));
+
+ Assign(SFFILES, Dir+'SFFILES.BBS');
+ {$I-} Reset(SFFILES); {$I+}
+ If Ioresult <> 0 Then Exit;
+
+ Assign(NEWFILES, TempDir+'\NEWFILES.DAT');
+ Append(NewFiles);
+
+ Repeat
+  Ligne := '';
+  ReadLn(SFFILES, Ligne);
+   If Copy(Ligne, 18,1) = ',' Then
+   If Copy(Ligne, 26,1) = '-' Then
+   If Copy(Ligne, 29,1) = '-' Then Begin;
+                                    Suivante := False;
+                                    Month_1  := StrToInt(Copy(Ligne, 24, 2));
+                                    Day_1    := StrToInt(Copy(Ligne, 27, 2));
+                                    Year_1   := StrToInt(Copy(Ligne, 30, 2));
+                                     If Day_Diff(day_2, month_2, year_2, day_1, month_1, year_1) >= 0 Then
+                                      Begin;
+                                       Inc(Nombre);
+                                       If Fichier = False Then
+                                         Begin;
+                                          Writeln(NewFiles);
+                                          Writeln(NewFiles);
+                                          Writeln(NewFiles,Rec,') '+Description);
+                                          Writeln(NewFiles,Rep('=',Length( IntToStr(Rec)+') '+Description)));
+                                          Writeln(NewFiles);
+                                         End;
+Repeat
+If Length(Ligne) > 0 Then
+If Pos('', Ligne) <= 0 Then Begin;
+                             If ( (Copy(Ligne, 18,1) = ',')   And
+                                  (Copy(Ligne, 26,1) = '-')   And
+                                  (Copy(Ligne, 29,1) = '-') ) Then Writeln(NewFiles, Ligne)
+                                                              Else Writeln(NewFiles, Ligne);
+                             Ligne := '';
+                            End;
+If Length(Ligne) > 0 Then
+If Pos('', Ligne) > 0 Then Begin;
+
+                             If Pos('', Ligne) > 1 Then Begin;
+                                                          WriteLn(NewFiles,Copy(Ligne, 1, Pos('', Ligne)-1));
+                                                          Delete(Ligne, 1, Pos('', Ligne)-1);
+                                                         End;
+
+                             If Pos('', Ligne) = 1 Then Begin;
+                                                          Delete(Ligne, 1, 1);
+                                                          Ligne := '                                 '+Ligne;
+                                                          If Length(Copy(Ligne, 1, Pos('', Ligne))) > 0 Then
+                                                          WriteLn(NewFiles,Copy(Ligne, 1, Pos('', Ligne)-1));
+                                                          Delete(Ligne, 1, Pos('', Ligne)-1);
+                                                         End;
+                            End;
+
+Until Ligne = '';
+                                       Suivante := True;
+                                       Fichier := True;
+                                      End;
+                                   End;
+
+
+
+If Copy(Ligne, 1, 1) = '' Then If Suivante = True Then
+Repeat
+If Length(Ligne) > 0 Then
+If Pos('', Ligne) <= 0 Then Begin;
+                             If ( (Copy(Ligne, 18,1) = ',') And (Copy(Ligne, 26,1) = '-')
+                              And (Copy(Ligne, 29,1) = '-') ) Then Writeln(NewFiles, Ligne)
+                              Else Begin;
+                                    Writeln(NewFiles, Ligne);
+                                   End;
+                             Ligne := '';
+                            End;
+If Length(Ligne) > 0 Then
+If Pos('', Ligne) > 0 Then Begin;
+                             If Pos('', Ligne) > 1 Then Begin;
+                                                          WriteLn(NewFiles,Copy(Ligne, 1, Pos('', Ligne)-1));
+                                                          Delete(Ligne, 1, Pos('', Ligne)-1);
+                                                         End;
+
+                             If Pos('', Ligne) = 1 Then Begin;
+                                                          Delete(Ligne, 1, 1);
+                                                          Ligne := '                                 '+Ligne;
+                                                          If Length(Copy(Ligne, 1, Pos('', Ligne))) > 0 Then
+                                                          WriteLn(NewFiles,Copy(Ligne, 1, Pos('', Ligne)-1));
+                                                          Delete(Ligne, 1, Pos('', Ligne)-1);
+                                                         End;
+                            End;
+
+Until Ligne = '';
+ Until Eof(SFFILES);
+ Close(NewFiles);
+ Close(SFFILES);
+
+ VisuNewsFiles := Nombre;
+End;
+{---------------------------------------------------------------------------}
+Function NewsFiles(SFDIR : String; Sec : Integer; Date : String; TempDir : String) : Integer;
+TYPE
+FileSystem    = Record
+                  FSec          : Integer;
+                  FDesc         : String[40];
+                  FilePath,
+                  UploadPath    : String[60];
+                  ShowToAll,
+                  FEqual,
+                  CDRom,
+                  SearchArea,
+                  FreeDLArea    : Boolean;
+                  PrivSec       : Array[1..5] Of Integer;
+                  Extra         : Array[1..76] Of Byte;
+                End;
+
+{$IFDEF ENGLISH}
+CONST PasDeSFFAREA : String = 'File SFFAREA.DAT Not Found In Directory';
+      NewFile      : String = 'News Files Since';
+{$ELSE}
+CONST PasDeSFFAREA : String = 'Fichier SFFAREA.DAT Non Trouv‚ Dans Le Directorie';
+      NewFile      : String = 'Nouveaux Fichiers Depuis';
+{$ENDIF}
+
+Var SFS : File Of FileSystem;
+    SF  : FileSystem;
+    Rec : Integer;
+    Entete : String;
+    NEWFILES : Text;
+    Nombre   : Integer;
+
+Begin;
+
+
+ If Date = 'N/A' Then Date := Date1;
+
+ Nombre := 0;
+ Assign(SFS, SFDIR+'SFFAREA.DAT');
+ {$I-} Reset(SFS); {$I+}
+ If Ioresult <> 0 Then Begin;
+                        Writeln(' þþþ '+PasDeSFFAREA+' '+SFDIR);
+                        Exit;
+                       End;
+ Rec := 0;
+
+ Assign(NEWFILES, TempDir+'\NEWFILES.DAT');
+ {$I-} Reset(NEWFILES); {$I+}
+ If Ioresult <> 0 Then ReWrite(NewFiles) Else Append(NEWFiles);
+ Writeln(NewFiles,'                    þþþ  '+NewFile+' '+Copy(Date, 1, 2)+'/'+Copy(Date, 4, 2)+'/'+Copy(Date, 7, 2)
+  +'  þþþ');
+ Close(NewFiles);
+
+ Repeat
+  Seek(SFS, Rec);
+  Read(SFS, SF);
+   If SF.Cdrom = False Then
+   If ( (SF.ShowToAll = True) Or (SF.FSec <= Sec) ) Then
+    Nombre := Nombre + VisuNewsFiles(Sf.Filepath, Rec+1, SF.FDesc, Date, TempDir);
+  Inc(Rec);
+ Until Rec = FileSize(SFS);
+ Close(SFS);
+
+ NewsFiles := Nombre;
+
+ Assign(NEWFILES, TempDir+'\NEWFILES.DAT');
+ Append(NewFiles);
+ Writeln(NewFiles);
+ Writeln(NewFiles, ' '+Rep(#196, 78));
+
+ Close(NewFiles);
+End;
+{---------------------------------------------------------------------------}
+
+End.

@@ -1,0 +1,197 @@
+UNIT MGRProto;
+
+{$I LANGAGE.DIR}
+
+Interface
+
+ Procedure ProtoColEditor;
+
+Implementation
+
+ Uses CRT,
+      BSFUtils,
+      MGRVaria;
+
+Var Modif : Boolean;
+{-------------------------------------------------------------------------}
+Procedure LectureCFG;
+{$I CONFIG.PAS}
+{-------------------------------------------------------------------------}
+Procedure ProtoColEditor;
+
+Var
+ Fin        : Boolean;
+ C          : Char;
+ Rec        : Integer;
+ Ligne      : String[80];
+
+ Proto      : Array[0..9] Of ConfigurationProtocoles;
+ Protoc     : ConfigurationProtocoles;
+ ProtoCol   : File Of ConfigurationProtocoles;
+
+
+Begin;
+ Modif := False;
+ LectureCFG;
+ Assign(Protocol, Config.BSFMailDir+'BSFPROTO.DAT');
+ {$I-} Reset(Protocol); {$I+}
+ If IoResult <> 0 Then
+  Begin
+   Rewrite(Protocol);
+   For Rec := 0 To 9 Do
+    Begin;
+     Protoc.Lettre := ' ';
+     FillChar(Protoc.Name   , 21 , ' ');
+     FillChar(Protoc.Receive, 61 , ' ');
+     FillChar(Protoc.Send   , 61 , ' ');
+     Proto[Rec].Lettre  := Protoc.Lettre;
+     Proto[Rec].Name    := Protoc.Name;
+     Proto[Rec].Receive := Protoc.Receive;
+     Proto[Rec].Send    := Protoc.Send;
+     Seek(Protocol, Rec);
+     Write(Protocol, Protoc);
+    End;
+  End
+ Else
+  Begin;
+   For Rec := 0 To FileSize(Protocol)-1 Do
+    Begin;
+     Seek(Protocol, Rec);
+     Read(Protocol, Protoc);
+     Proto[Rec].Lettre  := Protoc.Lettre;
+     Proto[Rec].Name    := Protoc.Name;
+     Proto[Rec].Receive := Protoc.Receive;
+     Proto[Rec].Send    := Protoc.Send;
+    End;
+  End;
+ Close(Protocol);
+
+Rec := 0;
+
+Repeat
+
+ ClrScr;
+
+{$IFDEF ENGLISH}
+ TextColor(14); GotoXY(27,1); Writeln('CONFIGURATION EXTERNAL PROTOCOLS');
+ TextColor(3); GotoXY(2,3);
+ Writeln('Protocol #',Rec+1,' of 10');
+ TextColor(15);
+ GotoXY(2,08); Writeln('A..Procotol Letter : ', Proto[Rec].Lettre);
+ GotoXY(2,10); Writeln('B..Protocol Name : ' , Proto[Rec].Name);
+ GotoXY(2,13); Writeln('C..Receive : '       , Proto[Rec].Receive);
+ GotoXY(2,15); Writeln('D..Send    : '       , Proto[Rec].Send);
+ GotoXY(1,22); Write('Your Choise [A-D], <+>, <->, Q To Quit :');
+{$ELSE}
+ TextColor(14); GotoXY(28,1); Writeln('PROTOCOLE DE TRANSDERT EXTERNE');
+ TextColor(3); GotoXY(2,3);
+ Writeln('Protocole #',Rec+1,' Sur 10');
+ TextColor(15);
+ GotoXY(2,08); Writeln('A..Lettre Procotole : ', Proto[Rec].Lettre);
+ GotoXY(2,10); Writeln('B..Nom Du Protocole : ' , Proto[Rec].Name);
+ GotoXY(2,13); Writeln('C..R‚ception : '       , Proto[Rec].Receive);
+ GotoXY(2,15); Writeln('D..Emission  : '       , Proto[Rec].Send);
+ GotoXY(1,22); Write('Votre Choix [A-D], <+>, <->, Q Pour Quitter :');
+{$ENDIF}
+ Repeat
+  C := upcase(readKey);
+ Until C in ['A','B','C','D','+','-','Q',#27];
+
+  Case C Of
+   'A' :
+         Begin;
+         {$IFDEF ENGLISH}
+          GotoXY(3,24); Write('Protocol Letter : ');
+         {$ELSE}
+          GotoXY(3,24); Write('Lettre Du Protocol : ');
+         {$ENDIF}
+          ReadLn(Proto[Rec].Lettre);
+          Proto[Rec].Lettre := MAJ(Proto[Rec].Lettre);
+          Modif := True;
+         End;
+   'B' :
+         Begin;
+         {$IFDEF ENGLISH}
+          GotoXY(3,24); Write('Protocol Name : ');
+         {$ELSE}
+          GotoXY(3,24); Write('Nom Du Protocole : ');
+         {$ENDIF}
+          Readln(Proto[Rec].Name);
+          Modif := True;
+         End;
+   'C' :
+         Begin;
+         {$IFDEF ENGLISH}
+          GotoXY(3,24); Write('Receive : ');
+         {$ELSE}
+          GotoXY(3,24); Write('R‚ception : ');
+         {$ENDIF}
+          Readln(Proto[Rec].Receive);
+          Modif := True;
+         End;
+   'D' :
+         Begin;
+         {$IFDEF ENGLISH}
+          GotoXY(3,24); Write('Send : ');
+         {$ELSE}
+          GotoXY(3,24); Write('Emission : ');
+         {$ENDIF}
+          Readln(Proto[Rec].Send);
+          Modif := True;
+         End;
+   '+' :
+         Begin;
+           Inc(Rec);
+           If Rec > 9 Then Rec := 9;
+         End;
+   '-' :
+         Begin;
+           Dec(Rec);
+           If Rec < 0 Then Rec := 0;
+         End;
+   'Q' : Fin := true;
+   #27 : Fin := True;
+  End;
+
+Until Fin = True;
+
+ If Modif Then
+  Begin;
+   TextColor(14);
+   GotoXY(2,24);
+  {$IFDEF ENGLISH}
+   Write(' SAVE (Y/n) : ');
+  {$ELSE}
+   Write(' SAUVEZ (O/n) : ');
+  {$ENDIF}
+   Repeat
+    C := Upcase(ReadKey);
+   Until C in ['Y','N','O',#27,#13];
+
+   Case C of
+    #13,
+    'O',
+    'Y' : Begin;
+           Assign(Protocol, Config.BSFMailDir+'BSFPROTO.DAT');
+           Reset(Protocol);
+           For Rec := 0 To 9 Do
+            Begin;
+             Protoc.Lettre  := Proto[Rec].Lettre;
+             Protoc.Name    := Proto[Rec].Name;
+             Protoc.Receive := Proto[Rec].Receive;
+             Protoc.Send    := Proto[Rec].Send;
+             Seek(Protocol, Rec);
+             Write(Protocol, Protoc);
+            End;
+            Close(Protocol);
+          End;
+    #27,
+    'N' :;
+   End;
+  End;
+Fin := False;
+
+End;
+{-------------------------------------------------------------------------}
+
+END.

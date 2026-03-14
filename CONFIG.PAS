@@ -1,0 +1,21 @@
+Var CFG : Text;
+    S   : String;
+Begin;
+{Lecture NETMAIL.CFG [Fichier Texte]}
+ Assign(CFG, ConfigPathName);
+ Reset(CFG);
+ ReadLn(CFG,s); If Copy(S, Length(s), 1) <> '\' then S := S + '\'; Config.BSFMailDir := S;
+ ReadLn(CFG,s); Config.BBSName    := S;
+ ReadLn(CFG,s); Config.BBSID      := S;
+ ReadLn(CFG,s); Config.BBSCity    := S;
+ ReadLn(CFG,s); Config.BBSPhone   := S;
+ ReadLn(CFG,s); If Copy(S, Length(s), 1) <> '\' then S := S + '\'; Config.LocalQWK := S;
+ ReadLn(CFG,s); Config.WelcomeDir := S;
+ ReadLn(CFG,s); Config.NewsDir    := S;
+ ReadLn(CFG,s); Config.GoodbyeDir := S;
+ ReadLn(CFG,s); If MAJ(Copy(S, 1, 1)) = 'Y' Then Config.AddFiles := True Else Config.AddFiles := False;
+ ReadLn(CFG,s); If MAJ(Copy(S, 1, 1)) = 'Y' Then Config.Goodbye  := True Else Config.Goodbye  := False;
+ ReadLn(CFG,s); Config.PathLog    := S;
+ ReadLn(CFG,s); If Copy(S, Length(s), 1) <> '\' then S := S + '\'; Config.SFDir := S;
+ Close(CFG);
+End;

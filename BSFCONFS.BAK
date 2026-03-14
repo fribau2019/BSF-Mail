@@ -1,0 +1,880 @@
+UNIT BSFConfs;
+
+{$I E:\SOURCE~1\PASCAL\NETMAIL\LANGAGE.DIR}
+
+Interface
+
+ Procedure SelectConf;
+
+Implementation
+ USES BSFCOMM,
+      BSFHelp,
+      BSFUtils,
+      BSFConst;
+
+TYPE
+  MsgSystem     = Record
+                  MSec           : Integer;
+                  NetMailConf    : Boolean;
+                  MDesc          : String[29];
+                  MSub           : String[10];
+                  MEqual,
+                  PublicMsgConf,
+                  AllowDelete,
+                  PackUnReceived : Boolean;
+                  DaysOld        : Word;
+                  DelOldThdMsg   : Boolean;
+                  NoOfLines      : Word;
+                  OneExtra       : Boolean;
+                  PrivSec        : Array[1..5] Of Integer;
+                  MsgEntrySec    : Word;
+                  Extra          : Array[1..44] Of Byte;
+                  AllowNetRoute,
+                  MarkAsSent     : Boolean;
+                  NetIDName      : String[15];
+                End;
+
+
+  MessageIdx    = Record
+                   FromWhoCRC,
+                   ToWhoCRC,
+                   MsgNumber,
+                   OrgMsgNumber   : LongInt;
+  End;
+
+(* SFMSG[X].LMR *)
+  LastMessage   = Record
+                   LMsgRed : LongInt;
+                  End;
+
+(* NETCONF.DEF *)
+   DefaultConference = Record
+                        Default : Boolean;
+                        Force   : Boolean;
+                        Extra   : Array[0..9] Of Byte;
+                       End;
+
+VAR
+ PointIDX   : MessageIDX;
+ IDX        : File Of MessageIDX;
+ Lower,
+ Higher     : Longint;
+ X          : Integer;
+ I          : Integer;
+ LM         : File Of LastMessage;
+ LMR        : LastMessage;
+ Conf       : Word;
+ NBPage     : Word;
+ NPage      : Byte;
+ B          : Char;
+ D          : String[15];
+ C          : String[20];
+ Ligne      : String[79];
+ Code       : Integer;
+ nomconf    : String[29];
+ MsgS       : File Of MsgSystem;
+ Msg        : MsgSystem;
+ CodeConf   : Array[0..Register] Of Integer;
+ Default    : Array[0..Register, 1..2] Of Boolean;
+ Def        : File Of DefaultConference;
+ Deff       : defaultConference;
+ ConfLower,
+ ConfHigher : Word;
+
+
+{-----------------------------------------------------------------------}
+Function TestChaine(C : String) : Boolean;
+Var COP : Integer;
+    Bon : Boolean;
+Begin;
+  Bon := False;
+  COP := 1;
+  Repeat
+   If C[COP] In ['0'..'9',' '] Then Bon := True Else Bon := False;
+   Inc(COP);
+  Until ( (Bon = False) Or (COP = Length(C)+1));
+
+  If Bon = True Then TestChaine := True;
+  If Bon = False Then TestChaine := False;
+End;
+{-----------------------------------------------------------------------}
+Function Test : Boolean;
+Var Alors : Boolean;
+
+Function Pass(Conf : Integer) : Boolean;
+Var Ok : Boolean;
+    J     : Integer;
+Begin;
+ J := 0;
+ Ok := False;
+ Repeat
+  If Conf = CodeConf[J]+1 Then Ok := True Else Inc(J);
+ Until ( (Ok = True) Or (J = Register));
+ Pass := Ok;
+End;
+
+Begin;
+ Alors := True;
+ If ( (Conf >= 1) And (Conf <= FileSize(MsgS)))
+  Then Alors := True
+  Else Alors := false;
+ If Alors = True Then
+  If Conf >= CodeConf[NPage*26]+1
+   Then Alors := True
+   Else Alors := false;
+ If Alors = True Then
+  If ( (NPage < NbPage) And (Conf <= CodeConf[NPage*26+26]))
+   Then Alors := True
+   Else
+   If ( (NPage +1 = NbPage) And (Conf <= FileSize(MsgS)))
+    Then Alors := True
+    Else Alors := False;
+ If Pass(Conf) = False
+  Then Alors := False;
+ Test := Alors;
+End;
+{-----------------------------------------------------------------------}
+Function SFMSG(Rec : Integer) : String;
+Begin;
+
+ If Rec < 9  Then SFMSG := 'SFMSG0'+IntToStr(Rec+1)
+  Else SFMSG := 'SFMSG'+IntToStr(Rec+1);
+ End;
+{-----------------------------------------------------------------------}
+Function Caff(Debut : Integer): String;
+
+Begin;
+ If Debut < 0   Then Caff := '  ';
+ If Debut = 0   Then Caff := '  ';
+ If Debut = 1   Then Caff := ' A';
+ If Debut = 2   Then Caff := ' Y';
+ If Debut = 3   Then Caff := ' P';
+ If Debut = 100 Then Caff := 'N ';
+ If Debut = 101 Then Caff := 'NA';
+End;
+{-----------------------------------------------------------------------}
+Function Page(NbConf : Word) : Word;
+Begin;
+ Page := NbConf DIV 26;
+ If (NbConf/26 - NbConf DIV 26) > 0 Then Page := NbConf DIV 26 + 1;
+End;
+{-----------------------------------------------------------------------}
+Procedure Size(Lo, Hi : Word; Valeur : LongInt; Mode : Byte);
+Begin;
+
+  If ( (Valeur > 0) And (Mode = 0)) Then Exit;
+
+  RmWriteln('');
+ {$IFDEF ENGLISH}
+  RmWriteln('Resetting Pointers, Please Wait...');
+ {$ELSE}
+  RmWriteln('Repositionnement Des Pointeurs, Veuillez Attendre...');
+ {$ENDIF}
+  RmWriteln('[0|||||||||||||||||25|||||||||||||||||50|||||||||||||||||75|||||||||||||||100]');
+  RmWrite(' ');
+
+  For I := Lo To Hi Do
+   Begin;
+    For X := 1 To Trunc(I/Hi*76) - Trunc((I-1)/Hi*76) Do RmWrite('°');
+     If User.Conf.Attribut[I] In [1,2,3,4,101] Then
+      Begin;
+
+      Assign(IDX, Config.MsgDir+SFMSG(I)+'.IDX');
+      {$I-} Reset(IDX); {$I+}
+      If IoResult = 0 Then
+       Begin;
+
+        If FileSize(IDX) > 0 Then
+         Begin;
+
+         Seek(IDX, 0);
+         Read(IDX, PointIDX);
+         Lower := PointIDX.MsgNumber;
+
+         Seek(IDX, FileSize(IDX)-1);
+         Read(IDX, PointIDX);
+         Higher := PointIDX.MsgNumber;
+
+
+       {Resize Par Rapport A Un Nombre : Valeur}
+        If ( (Valeur > 0) And (Mode = 1) ) Then
+         Begin;
+          LMR.LMsgRed  := Higher - Valeur;
+          If LMR.LMsgRed  < Lower Then LMR.LMsgRed := Lower;
+         End;
+       {Resize Sur Le Lower}
+        If ( (Valeur = 0) And (Mode = 0) ) Then
+         LMR.LMsgRed := Lower;
+       {Resize Sur Le Higher}
+        If ( (Valeur = 0) And (Mode = 1) ) Then
+         LMR.LMsgRed := Higher;
+        End
+       Else
+         LMR.LMsgRed  := 1;
+
+       Close(IDX);
+
+       Assign(LM, Config.MsgDir+SFMSG(I)+'.LMR');
+       Reset(LM);
+       Seek(LM, User.SFNumero);
+       Write(LM, LMR);
+       Close(LM);
+      End;
+     End;
+   End;
+End;
+{-----------------------------------------------------------------------}
+Procedure All(Lo, Hi : Word);
+Begin;
+ For I := Lo To Hi Do
+  Begin;
+   Seek(MsgS, I);
+   Read(MsgS, Msg);
+   If SecLevel >= Msg.MSec Then
+    If User.Conf.Attribut[I] <  99  Then User.Conf.Attribut[I] := 1
+    Else User.Conf.Attribut[I] := 101;
+  End;
+End;
+{-----------------------------------------------------------------------}
+Procedure Perso(Lo, Hi : Word);
+Begin;
+      For I := Lo To Hi Do
+       Begin;
+        Seek(MsgS, I);
+        Read(MsgS, Msg);
+        If SecLevel >= Msg.MSec Then
+         If Default[I, 2] = False Then
+          If User.Conf.Attribut[I] <  99  Then User.Conf.Attribut[I] := 3;
+       End;
+
+End;
+{-----------------------------------------------------------------------}
+Procedure Yall(Lo, Hi : Word);
+Begin;
+      For I := Lo To Hi Do
+       Begin;
+        Seek(MsgS, I);
+        Read(MsgS, Msg);
+        If SecLevel >= Msg.MSec Then
+         If Default[I, 2] = False Then
+          If User.Conf.Attribut[I] < 99 Then User.Conf.Attribut[I] := 2;
+       End;
+End;
+{-----------------------------------------------------------------------}
+Procedure None(Lo, Hi : Word);
+Begin;
+      For I := Lo To Hi Do
+       Begin;
+        Seek(MsgS, I);
+        Read(MsgS, Msg);
+        If SecLevel >= Msg.MSec Then
+         If Default[I, 2] = False Then
+          If User.Conf.Attribut[I] < 99 Then User.Conf.Attribut[I] := 0
+          Else User.Conf.Attribut[I] := 100;
+       End;
+End;
+{-----------------------------------------------------------------------}
+Procedure Chiffre(NbConf : Word);
+Begin;
+{SI CHIFFRE SEULEMENT}
+  Begin;
+   Seek(MsgS, NbConf-1);
+   Read(MsgS, Msg);
+
+   If SecLevel >= Msg.MSec Then
+    Begin;
+
+     RmGotoXY(1,19); RmClrEol;
+     RmGotoXY(1,20); RmClrEol;
+     RmGotoXY(1,21); RmClrEol;
+     RmGotoXY(1,22); RmClrEol;
+
+     RmGotoXY(1,19);
+
+     Assign(IDX, Config.MsgDir+SFMSG(NbConf-1)+'.IDX');
+     {$I-} Reset(IDX); {$I+}
+
+     If Ioresult = 0 Then
+      Begin;
+       If FileSize(IDX) > 0 Then
+        Begin;
+         Seek(IDX, 0);
+         Read(IDX, PointIDX);
+         Lower := PointIDX.MsgNumber;
+        {$IFDEF ENGLISH}
+         RmWriteLn('þ Lowest Message  : ' + IntToStr(Lower));
+        {$ELSE}
+         RmWriteLn('þ Bas Message     : ' + IntToStr(Lower));
+        {$ENDIF}
+         Seek(IDX, FileSize(IDX)-1);
+         Read(IDX, PointIDX);
+         Higher := PointIDX.MsgNumber;
+        {$IFDEF ENGLISH}
+         RmWriteLn('þ Highest Message : ' + IntToStr(Higher));
+        {$ELSE}
+         RmWriteLn('þ Haut Message    : ' + IntToStr(Higher));
+        {$ENDIF}
+        End;
+       Close(IDX);
+      End
+     Else
+      Begin;
+       PointIDX.MsgNumber := 1;
+      {$IFDEF ENGLISH}
+       RmWriteLn('þ Conference Unavailable !');
+      {$ELSE}
+       RmWriteLn('þ Conf‚rence Non Disponible !');
+      {$ENDIF}
+       Delay(1200);
+       Exit;
+      End;
+
+      Assign(LM, Config.MsgDir+SFMSG(NbConf-1)+'.LMR');
+      {$I-} Reset(LM); {$I+}
+      If Ioresult = 0 Then
+       Begin;
+        If FileSize(LM) > 0 Then
+         Begin;
+         Seek(LM, User.SFNumero);
+         Read(LM, LMR);
+         End;
+        Close(LM);
+       End;
+    End;
+
+    If LMR.LMsgRed > Higher Then LMR.LMsgRed := Higher;
+    If LMR.LMsgRed < Lower  Then LMR.LMsgRed := Lower;
+
+   {$IFDEF ENGLISH}
+    RmWriteln('þ Last Message    : ' + IntToStr(LMR.LMsgRed));
+   {$ELSE}
+    RmWriteln('þ Dernier Message : ' + IntToStr(LMR.LMsgRed));
+   {$ENDIF}
+
+    RmGotoXY(41,19); RmClrEol;
+
+    If User.Conf.Attribut[NbConf-1] >= 100 Then
+     Begin;
+      RmWrite('A]ll or N]one : ');
+       Repeat
+        B := Upcase(RmReadKey);
+       Until B In ['A','N',#13];
+       RmWriteln(B);
+     End
+    Else
+     Begin;
+      If ( (Default[NbConf-1, 2] = False) Or (User.NetStatus = True)) Then
+       Begin;
+        RmWrite('P)erso, A)ll, Y)ours&All or N)one : ');
+        Repeat
+         B := Upcase(RmReadKey);
+        Until B In ['P','A','Y','N',#13];
+        RmWriteln(B);
+       End
+      Else
+       Begin;
+       {$IFDEF ENGLISH}
+        RmWrite('Conference Forced By SysOp...');
+       {$ELSE}
+        RmWrite('Conf‚rence Forc‚e Par Le SysOp...');
+       {$ENDIF}
+        B := 'A';
+       End;
+     End;
+
+   Case B Of
+    'P' : User.Conf.Attribut[NbConf-1] := 3;
+    'A' : Begin;
+           If USer.Conf.Attribut[NbConf-1] < 100  Then User.Conf.Attribut[NbConf-1] := 1
+            Else User.Conf.Attribut[NbConf-1] := 101;
+          End;
+    'Y' : User.Conf.Attribut[NbConf-1] := 2;
+    'N' : Begin;
+           If USer.Conf.Attribut[NbConf-1] < 100  Then User.Conf.Attribut[NbConf-1] := 0
+            Else User.Conf.Attribut[NbConf-1] := 100;
+          End;
+    #13 :;
+   End;
+
+   D := '';
+
+   If B in ['P','A','Y'] Then
+    Begin;
+     RmGotoXY(41,21); RmClrEol;
+     RmWrite('Message # : ');
+     D := RmReads;
+     Val(D, LMR.LMsgRed, Code);
+     Writeln(Code);
+     If Code = 0 Then
+      Begin;
+       If LMR.LMsgRed < Lower  Then LMR.LMsgRed := Lower;
+       If LMR.LMsgRed > Higher Then LMR.LMsgRed := Higher;
+       Assign(LM, Config.MsgDir+SFMSG(NbConf-1)+'.LMR');
+      {$I-} Reset(LM); {$I+}
+      If Ioresult = 0 Then
+       Begin;
+        Seek(LM, User.SFNumero);
+        Write(LM, LMR);
+        Close(LM);
+       End;
+      End;
+    End;
+  End;
+End;
+{-----------------------------------------------------------------------}
+Procedure PageDePresentation;
+Begin;
+  RmClrScr;
+  RmSetColor(14,0);
+ {$IFDEF ENGLISH}
+  RmWrite('                          SELECTION CONFERENCES');
+  RmSetColor(7,0);
+  RmWriteln('     Page '+IntToStr(NPage+1)+' Of '+IntToStr(NbPage));
+ {$ELSE}
+  RmWrite('                        SELECTION DES CONFERENCES');
+  RmSetColor(7,0);
+  RmWriteln('     Page '+IntToStr(NPage+1)+' De '+IntToStr(NbPage));
+ {$ENDIF}
+
+  RmSetColor(11,0);
+  RmWriteln('');
+
+
+  If AnsiColor = True Then
+   For I := NPage*26 To NPage*26+25 Do
+
+    If CodeConf[I] >= 0 Then
+   Begin;
+    Seek(MsgS, CodeConf[I]);
+    Read(MsgS, Msg);
+
+    Msg.MDesc := Msg.MDesc;
+
+    If I-NPage*26 < 13 Then RmGotoXY(3, I-NPage*26+3)
+     Else RmGotoXY(40, I-NPage*26-10);
+
+    RmWrite(Caff(User.Conf.Attribut[CodeConf[I]]));
+
+    If CodeConf[I] <  9                            Then RmWrite('   '+IntToStr(CodeConf[I]+1));
+    If CodeConf[I] >= 9  Then If CodeConf[I] < 99  Then RmWrite('  '+IntToStr(CodeConf[I]+1));
+    If CodeConf[I] >= 99 Then If CodeConf[I] < 999 Then RmWrite(' '+IntToStr(CodeConf[I]+1));
+    RmWrite('. '+Msg.MDesc);
+
+  End;
+
+  If AnsiColor = False Then
+   For I := NPage*26 To NPage*26+12 Do
+    If CodeConf[I] >= 0 Then
+   Begin;
+    Seek(MsgS, CodeConf[I]);
+    Read(MsgS, Msg);
+    Msg.MDesc := Msg.MDesc;
+
+  {1er Colonne}
+   Ligne := ' '+Caff(User.Conf.Attribut[CodeConf[I]]);
+   If CodeConf[I] < 9                            Then Ligne := Ligne + '   '+IntToStr(CodeConf[I]+1);
+   If CodeConf[I] >=9  Then If CodeConf[I] < 99  Then Ligne := Ligne + '  '+IntToStr(CodeConf[I]+1);
+   If CodeConf[I] >=99 Then If CodeConf[I] < 999 Then Ligne := Ligne + ' '+IntToStr(CodeConf[I]+1);
+
+   Ligne := Ligne + '. ' + Msg.MDesc + Copy(Blanc,1,29-Length(Msg.MDesc));
+
+  {2eme Colonne}
+   If CodeConf[I+13] >=0 Then Begin;
+    Seek(MsgS, CodeConf[I+13]);
+    Read(MsgS, Msg);
+    Msg.MDesc := Msg.MDesc;
+
+    Ligne := Ligne + ' '+Caff(User.Conf.Attribut[CodeConf[I+13]]);
+    If CodeConf[I+13] < 9                               Then Ligne := Ligne + '   '+IntToStr(CodeConf[I+13]+1);
+    If CodeConf[I+13] >=9  Then If CodeConf[I+13] < 99  Then Ligne := Ligne + '  '+IntToStr(CodeConf[I+13]+1);
+    If CodeConf[I+13] >=99 Then If CodeConf[I+13] < 999 Then Ligne := Ligne + ' '+IntToStr(CodeConf[I+13]+1);
+
+    Ligne := Ligne + '. ' + Msg.MDesc;
+    End;
+
+   RmWriteLn(Ligne);
+   End;
+
+ RmWriteln('');
+ RmSetColor(15,0);
+ RmGotoXY(2,17);
+{$IFDEF ENGLISH}
+ RmWrite('Command, <+/->, <?> Help, <Q>uit : ');
+{$ELSE}
+ RmWrite('Commande, <+/->, <?> Aide, <Q>uitter : ');
+{$ENDIF}
+
+
+End;
+{-----------------------------------------------------------------------}
+{-----------------------------------------------------------------------}
+{-----------------------------------------------------------------------}
+{-----------------------------------------------------------------------}
+Procedure SelectConf;
+
+
+Begin;
+
+(* Lecture Du Fichier Des Conferences Par Default *)
+ Assign(DEF, Config.BsfMailDir+'BSFCONF.DEF');
+ {$I-} Reset(DEF); {$I+}
+ If IoResult = 0 Then
+  Begin;
+   For I := 0 To Register Do
+    Begin;
+     Seek(DEF, I);
+     Read(DEF, Deff);
+     Default[I, 1] := Deff.Default;
+     Default[I, 2] := Deff.Force;
+    End;
+   Close(DEF);
+  End;
+
+
+(* Mise En Place Des Conferences Forcees Par Le SysOp *)
+ If User.NetStatus = False Then
+  For I := 0 To Register Do
+   If Default[I, 2] = True Then
+    User.Conf.Attribut[I] := 1;
+
+
+
+(* Ouverture du Fichier SFMCONF.DAT *)
+ Assign(MsgS, Config.SfDir+'SFMCONF.DAT');
+ {$I-} Reset(MsgS); {$I+}
+ If Ioresult <> 0 Then Begin;
+                         RmWriteln('');
+                        {$IFDEF ENNGLISH}
+                         RmWrite('þ Conferences Are Not Available, Please Refer To SysOp');
+                        {$ELSE}
+                         RmWrite('þ Les conf‚rences ne sont pas dispobles, Veuillez en r‚f‚rer au SysOp');
+                        {$ENDIF}
+                         Delay(2000);
+                         Exit;
+                       End;
+
+
+ (* Mise En Memoire Des Conferences Disponibles Pour Le User *)
+ For I := 0 To Register Do CodeConf[I] := -1;
+ X := 0;
+ NbPage := 0;
+ For I := 0 To FileSize(MsgS)-1 Do
+  Begin;
+   Seek(MsgS, I);
+   Read(MsgS, Msg);
+   If SecLevel >= Msg.Msec Then
+    Begin;
+     CodeConf[X] := I;
+     Inc(NbPage);
+     Inc(X);
+    End;
+  End;
+
+ NbPage := Page(NbPage);
+ NPage  := 0;
+
+(* Debut Du Traitement *)
+Repeat
+
+ PageDePresentation;
+
+ C := RmReads;
+
+ Val(C, Conf, Code);
+
+{SI CHIFFRE SEULEMENT}
+ If ( (Code = 0) And (Test = True)) Then Begin;
+                                          Chiffre(Conf);
+                                          C := '';
+                                         End;
+
+  {------------------ FIN DE LA PARTIE NOMBRE -------------------------}
+
+
+{SI DIFFERENT D'UN NOMBRE}
+ If Code <> 0 Then
+  If TestChaine(C) = False Then
+   Begin;
+    C := Reduce(C, ' ');
+
+ {[ALL x]}
+ If MAJ(Copy(C,1,3)) = 'ALL' Then
+  Begin;
+   Delete(C,1,3);
+
+ {[ALL]}
+ If Length(C) = 0 Then All(0, FileSize(MSGS)-1);
+
+ {[ALL PERSO]}
+ If MAJ(Copy(C,1,5)) = 'PERSO' Then Begin;
+                                     Delete(C, 1,5);
+                                     Perso(0, FileSize(MSGS)-1);
+                                    End;
+ {[ALL YALL]}
+ If MAJ(Copy(C,1,5)) = 'YALL' Then Begin;
+                                    Delete(C, 1,4);
+                                    Yall(0, FileSize(MSGS)-1);
+                                   End;
+
+ {[ALL NONE]}
+ If MAJ(Copy(C,1,5)) = 'NONE' Then Begin;
+                                    Delete(C, 1,4);
+                                    None(0, FileSize(MSGS)-1);
+                                   End;
+
+
+ {[ALL SIZE y]}
+ If MAJ(Copy(C,1,4)) = 'SIZE' Then
+  Begin;
+   Delete(C, 1, 4);
+    Ligne := '';
+   If Length(C) > 0 Then
+    If C[1] In ['0'..'9'] Then
+     While ( (C<>'') And (C[1] In ['0'..'9']) ) Do
+      Begin;
+       Ligne := Ligne + C[1];
+       Delete(C,1,1);
+      End;
+
+
+ {[ALL SIZE <rien>]}
+
+ If Length(Ligne) = 0 Then
+  If MAJ(Copy(C,1,3)) <> 'LOW' Then
+   If MAJ(Copy(C,1,4)) <> 'HIGH' Then
+    Begin;
+     RmWriteln('');
+    {$IFDEF ENGLISH}
+     RmWriteLn('Error');
+     RmWriteln('Syntaxe : ALL SIZE {LOW/HIGH/Number} ');
+     Delay(1500);
+    {$ELSE}
+     RmWriteln('Erreur');
+     RmWriteln('Syntaxe : ALL SIZE {LOW/HIGH/Nombre}');
+     Delay(1500);
+    {$ENDIF}
+   End;
+
+ {[ALL SIZE <Nombre>]}
+ If Ligne <> '' Then If StrToInt(Ligne) > 0 Then Size(0, FileSize(MsgS)-1, StrToInt(Ligne), 1);
+
+ {[ALL SIZE LOW]}
+ If Ligne = '' Then
+ If MAJ(Copy(C,1,3)) = 'LOW' Then Begin;
+                                   Delete(C,1,3);
+                                   Size(0, FileSize(MsgS)-1, 0, 0);
+                                  End;
+ {[ALL SIZE HIGH]}
+ If Ligne = '' Then
+ If MAJ(Copy(C,1,4)) = 'HIGH' Then Begin;
+                                    Delete(C,1,4);
+                                    Size(0, FileSize(MsgS)-1, 0, 1);
+                                   End;
+
+  End;
+  End;
+
+  {------------------ FIN DE LA PARTIE [ALL X] ------------------------}
+
+{SI SEPARATEUR (..) }
+ If POS('..', C) > 0 Then Begin;
+
+ {Recherche De La 1er Et 2nd Chaine}
+   Ligne := '';
+   If C[1] In ['0'..'9'] Then
+    While ( (C<>'') And (C[1] In ['0'..'9']) ) Do
+     Begin;
+      Ligne := Ligne + C[1];
+      Delete(C,1,1);
+     End;
+
+   ConfLower := StrToInt(Ligne);
+   Delete(C,1,2);
+   Ligne := '';
+
+   If C[1] In ['0'..'9'] Then
+     While ( (C<>'') And (C[1] In ['0'..'9']) ) Do
+      Begin;
+       Ligne := Ligne + C[1];
+       Delete(C,1,1);
+      End;
+
+   ConfHigher := StrToInt(Ligne);
+
+   If ConfHigher < ConfLower Then Begin;
+                                   Conf := ConfLower;
+                                   ConfLower  := ConfHigher;
+                                   ConfHigher := Conf;
+                                  End;
+   If ConfLower  < 1                 Then ConfLower  := 1;
+   If ConfHigher > FileSize(MsgS)-1  Then ConfHigher := FileSize(MsgS)-1;
+
+
+ {[#1..#2]}
+   If Length(C) = 0 Then All(ConfLower-1, ConfHigher-1);
+ {[#1..#2]}
+   If MAJ(Copy(C,1,3)) = 'ALL' Then Begin;
+                                     Delete(C, 1, 3);
+                                     All(ConfLower-1, ConfHigher-1);
+                                    End;
+ {[#1..#2 NONE]}
+   If MAJ(Copy(C,1,4)) = 'NONE' Then Begin;
+                                      Delete(C, 1, 4);
+                                      None(ConfLower-1, ConfHigher-1);
+                                     End;
+
+ {[#1..#2 YALL]}
+   If MAJ(Copy(C,1,4)) = 'YALL' Then Begin;
+                                      Delete(C, 1, 4);
+                                      Yall(ConfLower-1, ConfHigher-1);
+                                     End;
+ {[#1..#2 PERSO]}
+   If MAJ(Copy(C,1,5)) = 'PERSO' Then Begin;
+                                      Delete(C, 1, 5);
+                                      Perso(ConfLower-1, ConfHigher-1);
+                                     End;
+
+ {[#1..#2] SIZE x]}
+   If MAJ(Copy(C,1,4)) = 'SIZE' Then
+    Begin;
+     Delete(C,1,4);
+     Ligne := '';
+     If C[1] In ['0'..'9'] Then
+      While ( (C<>'') And (C[1] In ['0'..'9']) ) Do
+       Begin;
+        Ligne := Ligne + C[1];
+        Delete(C,1,1);
+       End;
+
+ If Length(Ligne) = 0 Then
+  If MAJ(Copy(C,1,3)) <> 'LOW' Then
+   If MAJ(Copy(C,1,4)) <> 'HIGH' Then
+    Begin;
+     RmWriteln('');
+    {$IFDEF ENGLISH}
+     RmWriteLn('Error');
+     RmWriteln('Syntaxe : #1..#2 SIZE {LOW/HIGH/Nunber} ');
+     Delay(1500);
+    {$ELSE}
+     RmWriteln('Erreur');
+     RmWriteln('Syntaxe : #1..#2 SIZE {LOW/HIGH/Nombre}');
+     Delay(1500);
+    {$ENDIF}
+   End;
+
+
+
+ {[#1..#2 SIZE <Nombre>]}
+ If Ligne <> '' Then If StrToInt(Ligne) > 0 Then Size(ConfLower-1, ConfHigher-1, StrToInt(Ligne), 1);
+
+
+ {[#1..#2] SIZE LOW]}
+   If Ligne = '' Then
+   If MAJ(Copy(C,1,3)) = 'LOW' Then Begin;
+                                     Delete(C,1,3);
+                                     Size(ConfLower-1,ConfHigher-1, 0, 0);
+                                    End;
+
+ {[#1..#2] SIZE HIGH]}
+   If MAJ(Copy(C,1,4)) = 'HIGH' Then Begin;
+                                      Delete(C,1,4);
+                                      Size(ConfLower-1,ConfHigher-1, 0, 1);
+                                     End;
+
+
+   End;
+ End;
+
+
+  {--------------- FIN DE LA PARTIE [ALL SIZE X] ----------------------}
+
+ {[RESET]}
+
+  If MAJ(Copy(C,1,5)) = 'RESET' Then Begin;
+                                      Delete(C, 1, 5);
+                                      None(0, FileSize(MSGS)-1);
+                                     End;
+
+
+  {--------------- FIN DE LA PARTIE [RESET] ----------------------}
+
+ {[DEFAULT]}
+  If MAJ(Copy(C,1,7)) = 'DEFAULT' Then
+   Begin;
+    Delete(C,1,7);
+    For I := 0 To FileSize(MSGS)-1 Do
+     Begin;
+      If Default[I, 1] = True Then
+       If User.Conf.Attribut[I] < 100 Then User.Conf.Attribut[I] := 1
+        Else
+      Else User.Conf.Attribut[I] := 0;
+     End;
+   End;
+End;
+
+
+  {--------------- FIN DE LA PARTIE [DEFAULT] ----------------------}
+{SOUS LA FORME [#1 #2 ... #n]} {Avec n >= 2}
+ If Code <> 0 Then
+  If TestChaine(C) = True Then
+   If Pos('..', C) = 0 Then
+    Begin;
+     Repeat
+      Code := StrToInt(Copy(C,1,Pos(' ',C)-1));
+       If ( (Code > 0) And (Code <= FileSize(MsgS)-1) ) Then
+         Begin;
+          Chiffre(Code);
+          Delete(C, 1, Length(Copy(C,1,Pos(' ',C))));
+         End
+       Else Delete(C, 1, Length(Copy(C,1,Pos(' ',C))));
+     Until ( (C = '') Or (Pos(' ', C) = 0)) ;
+
+     If Length(C) > 0 Then Chiffre(StrToInt(C));
+     C := '';
+
+    End;
+  {--------------- FIN DE LA PARTIE [#1 #2 #3 ...] ----------------------}
+
+{CHANGEMENT DE PAGE PAR [#x] }
+  If Code <> 0 Then
+   If C[1] = '#' Then
+    Begin;
+     If Length(C) = 1 Then
+      Begin;
+       RmWriteln('');
+      {$IFDEF ENGLISH}
+       RmWrite('Which Page (1 To '+IntToStr(NbPage)+') : ');
+      {$ELSE}
+       RmWrite('Quelle Page (1 A '+IntToStr(NbPage)+') : ');
+      {$ENDIF}
+       C := '';
+       C := RmReads;
+      End;
+      If Length(C) > 1 Then Delete(C, 1 , 1);
+      C := Reduce(C, ' ');
+      Code := StrToInt(C);
+      If Code In [1..NbPage] Then NPage := Code-1;
+      C := '';
+    End;
+
+  {-------------------- FIN DE LA PARTIE [#x] ----------------------------}
+
+{CHANGEMENT DE PAGE}
+
+ {[?]} If C = '?' Then HelpConference;
+ {[+]} If Code <> 0 Then If C = '+' Then Inc(NPage);
+ {[-]} If Code <> 0 Then If C = '-' Then If NPage > 0 Then Dec(NPage);
+
+  {------------------ FIN DE LA PARTIE [+/-] -----------------------------}
+
+ If NPage = NbPage Then NPage := NBPage-1;
+
+  {-------------------- FIN DU TRAITEMENT --------------------------------}
+
+
+
+Until MAJ(C) = 'Q';
+
+End;
+
+END.
